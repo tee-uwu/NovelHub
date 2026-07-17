@@ -92,11 +92,11 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background via-secondary/40 to-accent/30 p-4">
       <div className="w-full max-w-md">
-        <Link to="/" className="mb-8 flex items-center justify-center gap-2">
-          <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <BookOpen className="h-5 w-5" />
+        <Link to="/" className="mb-8 flex items-center justify-center gap-2 group">
+          <img src="/favicon.png" alt="NovelHub Logo" className="h-9 w-9 object-contain transition-transform group-hover:rotate-6 duration-300" />
+          <span className="font-serif text-2xl font-bold tracking-wide text-foreground transition-colors">
+            Novel<span className="text-primary italic font-serif font-light">Hub</span>
           </span>
-          <span className="text-xl font-semibold tracking-tight">NovelHub</span>
         </Link>
 
         <Card className="p-6">
