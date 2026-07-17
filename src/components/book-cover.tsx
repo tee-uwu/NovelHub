@@ -16,13 +16,36 @@ const palettes = [
   "from-fuchsia-600 via-purple-800 to-slate-900",
 ];
 
+function fixImageUrl(url: string) {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    if (u.hostname === 'imgur.com' && !u.pathname.startsWith('/a/') && !u.pathname.startsWith('/gallery/')) {
+      if (u.pathname.length > 1 && !u.pathname.includes('.')) {
+        return `https://i.imgur.com${u.pathname}.png`;
+      }
+    }
+    return url;
+  } catch (e) {
+    return url;
+  }
+}
+
 export function BookCover({ title, palette = 0, coverUrl, className = "" }: Props) {
   const p = palettes[palette % palettes.length];
 
   if (coverUrl) {
     return (
       <div className={`relative aspect-[2/3] w-full overflow-hidden rounded-md shadow-md book-hover ${className}`}>
-        <img src={coverUrl} alt={title} className="h-full w-full object-cover" loading="lazy" />
+        <img 
+          src={fixImageUrl(coverUrl)} 
+          alt={title} 
+          className="h-full w-full object-cover" 
+          loading="lazy"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "https://placehold.co/400x600/1e293b/white?text=Cover+Not+Found";
+          }}
+        />
       </div>
     );
   }
