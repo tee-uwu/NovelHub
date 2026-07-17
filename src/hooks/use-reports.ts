@@ -14,8 +14,8 @@ export function useReports() {
         .from("reports")
         .select(`
           *,
-          reporter:profiles!reporter_id(display_name, avatar_url, role),
-          reported:profiles!reported_id(display_name, avatar_url, role)
+          reporter:profiles!reports_reporter_id_fkey(display_name, avatar_url, role),
+          reported:profiles!reports_reported_id_fkey(display_name, avatar_url, role)
         `)
         .order("created_at", { ascending: false });
         
