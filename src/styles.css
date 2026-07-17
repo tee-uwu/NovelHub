@@ -1,0 +1,188 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora", ui-serif, Georgia, serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #F6FFF8; /* Cozy Mint White */
+  --foreground: #2B3E36; /* Deep Forest Sage */
+  --card: #EAF4F4; /* Soft Sage Card */
+  --card-foreground: #2B3E36;
+  --popover: #EAF4F4;
+  --popover-foreground: #2B3E36;
+  
+  --primary: #6B9080; /* Dusty Sage Green */
+  --primary-foreground: #F6FFF8; /* Light contrast text */
+  
+  --secondary: #CCE3DE;
+  --secondary-foreground: #2B3E36;
+  
+  --muted: #EAF4F4;
+  --muted-foreground: #5C7469; /* Sage grey text */
+  
+  --accent: #A4C3B2; /* Muted Mint Accent */
+  --accent-foreground: #2B3E36;
+  
+  --destructive: #E07A7A;
+  --destructive-foreground: #F6FFF8;
+  
+  --border: #CCE3DE;
+  --input: #CCE3DE;
+  --ring: #6B9080;
+  
+  --sidebar: #F6FFF8;
+  --sidebar-foreground: #2B3E36;
+  --sidebar-primary: #6B9080;
+  --sidebar-primary-foreground: #F6FFF8;
+  --sidebar-accent: #CCE3DE;
+  --sidebar-accent-foreground: #2B3E36;
+  --sidebar-border: #CCE3DE;
+  --sidebar-ring: #6B9080;
+}
+
+.dark {
+  --background: oklch(0.15 0.01 260); /* Original dark background */
+  --foreground: oklch(0.98 0.003 80);
+  --card: oklch(0.2 0.015 260);
+  --card-foreground: oklch(0.98 0.003 80);
+  --popover: oklch(0.2 0.015 260);
+  --popover-foreground: oklch(0.98 0.003 80);
+  
+  --primary: #A4C3B2; /* Muted Mint Green for buttons */
+  --primary-foreground: oklch(0.15 0.01 260); /* Dark text on mint */
+  
+  --secondary: oklch(0.25 0.015 260);
+  --secondary-foreground: oklch(0.98 0.003 80);
+  
+  --muted: oklch(0.25 0.015 260);
+  --muted-foreground: oklch(0.7 0.02 260);
+  
+  --accent: #6B9080; /* Dusty Sage Green for accents/links */
+  --accent-foreground: oklch(0.98 0.003 80);
+  
+  --destructive: #E07A7A;
+  --destructive-foreground: oklch(0.15 0.01 260);
+  
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: #A4C3B2;
+  
+  --sidebar: oklch(0.15 0.01 260);
+  --sidebar-foreground: oklch(0.98 0.003 80);
+  --sidebar-primary: #A4C3B2;
+  --sidebar-primary-foreground: oklch(0.15 0.01 260);
+  --sidebar-accent: oklch(0.25 0.015 260);
+  --sidebar-accent-foreground: oklch(0.98 0.003 80);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: #A4C3B2;
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+  .font-serif { font-family: var(--font-serif); }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted-foreground);
+  }
+}
+
+@layer utilities {
+  .card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1), 0 4px 10px -5px rgba(0,0,0,0.04);
+  }
+  
+  .book-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .book-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, var(--color-muted) 25%, var(--color-accent) 50%, var(--color-muted) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
