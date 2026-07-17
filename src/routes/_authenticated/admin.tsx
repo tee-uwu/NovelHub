@@ -344,7 +344,15 @@ function AdminPanel() {
   }
 
   const filteredApproved = approvedNovels.filter(n => n.title.toLowerCase().includes(searchNovel.toLowerCase()));
-  const filteredUsers = profiles.filter(p => p.display_name.toLowerCase().includes(searchUser.toLowerCase()) || p.id.includes(searchUser));
+  const filteredUsers = profiles.filter(p => (p.display_name || "").toLowerCase().includes(searchUser.toLowerCase()) || p.id.includes(searchUser));
+
+  const allPending = useMemo(() => {
+    const items = [
+      ...pendingNovels.map((n: any) => ({ ...n, type: 'novel' as const })),
+      ...pendingChapters.map((c: any) => ({ ...c, type: 'chapter' as const }))
+    ];
+    return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }, [pendingNovels, pendingChapters]);
 
   const chartData = useMemo(() => {
     if (!profiles || profiles.length === 0) return [];
@@ -451,85 +459,80 @@ function AdminPanel() {
           {/* Approvals tab */}
           <TabsContent value="approvals" className="mt-6 space-y-8">
             <div>
-              <h2 className="text-xl font-serif font-semibold mb-4">Pending Novel Approvals</h2>
-              {pendingLoading ? (
+              <h2 className="text-xl font-serif font-semibold mb-4">Pending Approvals Queue</h2>
+              {pendingLoading || pendingChaptersLoading ? (
                 <p className="text-muted-foreground animate-pulse">Loading queue...</p>
-              ) : pendingNovels.length === 0 ? (
+              ) : allPending.length === 0 ? (
                 <Card className="p-6 text-center text-sm text-muted-foreground">
-                  No novels in the approval queue. Excellent!
+                  No pending items in the approval queue. Excellent!
                 </Card>
               ) : (
                 <div className="space-y-4">
-                  {pendingNovels.map((n) => (
-                    <Card key={n.id} className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-serif text-lg font-semibold truncate">{n.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-0.5">by {n.author?.display_name} · Genre: {n.genre}</p>
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{n.synopsis}</p>
-                      </div>
-                      <div className="flex gap-2 shrink-0">
-                        <Button
-                          size="sm"
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1"
-                          onClick={() => approveMutation.mutate(n.id)}
-                          disabled={approveMutation.isPending}
-                        >
-                          <Check className="h-4 w-4" /> Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="flex items-center gap-1"
-                          onClick={() => rejectMutation.mutate(n.id)}
-                          disabled={rejectMutation.isPending}
-                        >
-                          <X className="h-4 w-4" /> Reject
-                        </Button>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h2 className="text-xl font-serif font-semibold mb-4">Pending Chapter Approvals</h2>
-              {pendingChaptersLoading ? (
-                <p className="text-muted-foreground animate-pulse">Loading queue...</p>
-              ) : pendingChapters.length === 0 ? (
-                <Card className="p-6 text-center text-sm text-muted-foreground">
-                  No chapters in the approval queue. Excellent!
-                </Card>
-              ) : (
-                <div className="space-y-4">
-                  {pendingChapters.map((c) => (
-                    <Card key={c.id} className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-serif text-lg font-semibold truncate">{c.novel?.title}</h3>
-                          <Badge variant="outline">Chapter {c.chapter_number}</Badge>
+                  {allPending.map((item) => (
+                    <Card key={`${item.type}-${item.id}`} className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      {item.type === 'novel' ? (
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-serif text-lg font-semibold truncate">{item.title}</h3>
+                            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">New Novel</Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5">by {item.author?.display_name} · Genre: {item.genre}</p>
+                          <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{item.synopsis}</p>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5 font-medium">{c.title}</p>
-                        <p className="text-xs text-muted-foreground mt-1">by {c.novel?.author?.display_name}</p>
-                      </div>
+                      ) : (
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-serif text-lg font-semibold truncate">{item.novel?.title}</h3>
+                            <Badge variant="outline">Chapter {item.chapter_number}</Badge>
+                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20">New Chapter</Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-0.5 font-medium">{item.title}</p>
+                          <p className="text-xs text-muted-foreground mt-1">by {item.novel?.author?.display_name}</p>
+                        </div>
+                      )}
+                      
                       <div className="flex gap-2 shrink-0">
-                        <Button
-                          size="sm"
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1"
-                          onClick={() => approveChapterMutation.mutate(c.id)}
-                          disabled={approveChapterMutation.isPending}
-                        >
-                          <Check className="h-4 w-4" /> Publish
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="flex items-center gap-1"
-                          onClick={() => rejectChapterMutation.mutate(c.id)}
-                          disabled={rejectChapterMutation.isPending}
-                        >
-                          <X className="h-4 w-4" /> Reject
-                        </Button>
+                        {item.type === 'novel' ? (
+                          <>
+                            <Button
+                              size="sm"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1"
+                              onClick={() => approveMutation.mutate(item.id)}
+                              disabled={approveMutation.isPending}
+                            >
+                              <Check className="h-4 w-4" /> Approve
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              className="flex items-center gap-1"
+                              onClick={() => rejectMutation.mutate(item.id)}
+                              disabled={rejectMutation.isPending}
+                            >
+                              <X className="h-4 w-4" /> Reject
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              size="sm"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-1"
+                              onClick={() => approveChapterMutation.mutate(item.id)}
+                              disabled={approveChapterMutation.isPending}
+                            >
+                              <Check className="h-4 w-4" /> Publish
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              className="flex items-center gap-1"
+                              onClick={() => rejectChapterMutation.mutate(item.id)}
+                              disabled={rejectChapterMutation.isPending}
+                            >
+                              <X className="h-4 w-4" /> Reject
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </Card>
                   ))}
@@ -679,16 +682,16 @@ function AdminPanel() {
             ) : (
               <div className="space-y-4">
                 {reports.map((r: any) => (
-                  <Card key={r.id} className="p-5 flex flex-col md:flex-row justify-between gap-4">
-                    <div className="flex-1 space-y-2 min-w-0">
-                      <div className="flex items-center gap-2">
+                  <Card key={r.id} className="p-5 flex flex-col lg:flex-row justify-between gap-4">
+                    <div className="flex-1 space-y-2 min-w-0 max-w-full">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <AlertTriangle className="h-4 w-4 text-destructive shrink-0" />
-                        <span className="font-semibold text-sm truncate">Reported User: {r.reported?.display_name}</span>
+                        <span className="font-semibold text-sm truncate max-w-[200px] sm:max-w-xs">Reported User: {r.reported?.display_name || 'Unknown'}</span>
                         <Badge variant="outline" className="text-[10px] uppercase shrink-0">{r.status}</Badge>
                       </div>
-                      <p className="text-sm bg-muted/50 p-3 rounded-md italic truncate">"{r.reason}"</p>
-                      <div className="text-xs text-muted-foreground truncate">
-                        Reported by {r.reporter?.display_name} on {new Date(r.created_at).toLocaleDateString()}
+                      <p className="text-sm bg-muted/50 p-3 rounded-md italic whitespace-pre-wrap break-words">"{r.reason}"</p>
+                      <div className="text-xs text-muted-foreground truncate max-w-full">
+                        Reported by {r.reporter?.display_name || 'Unknown'} on {new Date(r.created_at).toLocaleDateString()}
                       </div>
                     </div>
                     {r.status === "pending" && (
