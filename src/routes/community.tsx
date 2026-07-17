@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Heart, MessageCircle, Share2, TrendingUp, Users, Circle, Check, Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { useCommunities, useCommunityPosts, useIsMember, useToggleMembership, useCreatePost, useDeletePost, useMyCommunities } from "@/hooks/use-community";
+import { useCommunities, useCommunityPosts, useIsMember, useToggleMembership, useCreatePost, useDeletePost, useMyCommunities, useDeleteCommunity } from "@/hooks/use-community";
 import { useSession } from "@/hooks/use-session";
 import { CreateCommunityDialog } from "@/components/create-community-dialog";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,7 @@ function Community() {
   const toggleMembership = useToggleMembership();
   const createPost = useCreatePost();
   const deletePostMutation = useDeletePost();
+  const deleteCommunity = useDeleteCommunity();
 
   const [postContent, setPostContent] = useState("");
   const [replyingPostId, setReplyingPostId] = useState<string | null>(null);
@@ -180,9 +181,27 @@ function Community() {
 
             {activeCommunity && (
               <section className="animate-fade-in">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="font-serif text-2xl font-semibold">{activeCommunity.name}</h2>
-                  <Badge variant="secondary">Active Channel</Badge>
+                <div className="mb-4 flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <h2 className="font-serif text-2xl font-semibold">{activeCommunity.name}</h2>
+                    <Badge variant="secondary">Active Channel</Badge>
+                  </div>
+                  {(user?.id === activeCommunity.created_by || (user as any)?.role === "admin") && (
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this community?")) {
+                          deleteCommunity.mutate(activeCommunity.id, {
+                            onSuccess: () => setActiveCommId(null)
+                          });
+                        }
+                      }}
+                      disabled={deleteCommunity.isPending}
+                    >
+                      Delete Community
+                    </Button>
+                  )}
                 </div>
 
                 {user && isMember ? (

@@ -23,19 +23,23 @@ const links = [
 ];
 
 function useTheme() {
-  const [dark, setDark] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const stored = localStorage.getItem('novelhub-theme');
-    if (stored) return stored === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const [mounted, setMounted] = useState(false);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    const stored = localStorage.getItem('novelhub-theme');
+    const isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setDark(isDark);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     document.documentElement.classList.toggle('dark', dark);
     localStorage.setItem('novelhub-theme', dark ? 'dark' : 'light');
-  }, [dark]);
+  }, [dark, mounted]);
 
-  return { dark, toggle: () => setDark((d) => !d) };
+  return { dark, mounted, toggle: () => setDark((d) => !d) };
 }
 
 export function TopNav() {
@@ -161,9 +165,15 @@ export function TopNav() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input placeholder="Search novels, authors…" className="h-9 w-64 cursor-pointer pl-9" readOnly />
           </Link>
-          <Button size="icon" variant="ghost" onClick={toggleTheme} aria-label="Toggle theme">
-            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
+          {mounted ? (
+            <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
+              {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+          ) : (
+            <Button variant="ghost" size="icon" aria-label="Toggle theme placeholder">
+              <div className="h-5 w-5" />
+            </Button>
+          )}
           {user ? (
             <>
               <Link to="/notifications">

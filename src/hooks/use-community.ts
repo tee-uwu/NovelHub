@@ -98,6 +98,25 @@ export function useToggleMembership() {
   });
 }
 
+export function useDeleteCommunity() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (communityId: string) => {
+      const { error } = await supabase.from("communities").delete().eq("id", communityId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["communities"] });
+      queryClient.invalidateQueries({ queryKey: ["my-communities"] });
+      toast.success("Community deleted successfully.");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
 export function useCreatePost() {
   const queryClient = useQueryClient();
   return useMutation({
