@@ -47,7 +47,7 @@ export function TopNav() {
   const { user } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { dark, toggle: toggleTheme } = useTheme();
+  const { dark, mounted, toggle: toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   
   const { data: unreadCount = 0 } = useUnreadCount();
