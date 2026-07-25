@@ -6,12 +6,15 @@ NovelHub is a modern, collaborative platform for writers, readers, editors, and 
 
 ## Features
 
-- ** Immersive Reading Experience**: Read novels with a beautiful, customizable reader interface.
-- ** Collaborative Writing**: Post ads for editors or illustrators and collaborate with others on your novels.
-- ** Trending & Editors Choice**: Discover the hottest novels and editor-curated picks.
-- ** Community & Social**: Join genre-specific communities, discuss chapters, leave reviews, and chat with fellow readers.
-- ** Robust Moderation**: Admin dashboard to review pending novels, handle reports, and manage verified authors.
-- ** Modern Design**: Built with a stunning, responsive, and dynamic UI for a premium aesthetic.
+- **Immersive Reading Experience**: Read novels with a beautiful, customizable reader interface, featuring built-in Text-to-Speech (TTS) and in-line paragraph comments.
+- **Collaborative Writing**: Post ads for editors or illustrators and collaborate with others on your novels.
+- **AI Brainstorming Assistant**: Authors can use the built-in Gemini-powered AI to overcome writer's block, generate names, or brainstorm plot twists directly in their Workspace.
+- **Teehee the Support AI**: A global floating AI assistant powered by Gemini that follows you everywhere to answer your questions and tell dramatic jokes.
+- **Gamification & Contests**: Keep readers engaged with daily reading streaks, XP points, and seasonal writing contests.
+- **Trending & Editors Choice**: Discover the hottest novels and editor-curated picks.
+- **Community & Social**: Join genre-specific communities, discuss chapters, leave reviews, and chat with fellow readers.
+- **Robust Moderation**: Admin dashboard to review pending novels, handle reports, and manage verified authors.
+- **Modern Design**: Built with a stunning, responsive, and dynamic UI for a premium aesthetic.
 
 ##  Tech Stack
 
@@ -42,11 +45,12 @@ NovelHub is a modern, collaborative platform for writers, readers, editors, and 
    npm install
    ```
 
-3. **Set up environment variables:**
-   Copy the `.env.example` file to `.env` and fill in your Supabase credentials:
+4. **Set up environment variables:**
+   Create a `.env` file and fill in your credentials:
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_GEMINI_API_KEY=your_gemini_api_key
    ```
 
 4. **Initialize Supabase Database:**
