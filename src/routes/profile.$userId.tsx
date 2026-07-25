@@ -343,7 +343,7 @@ function PublicProfile() {
                   {allNovels.map((n: any, idx: number) => (
                     <Link key={n.id} to="/novel/$novelId" params={{ novelId: n.slug }} className="group flex flex-col">
                       <Card className="p-3 card-hover h-full flex flex-col justify-between">
-                        <BookCover title={n.title} coverUrl={n.cover_url} palette={idx + 2} className="w-full shadow-sm" />
+                        <BookCover title={n.title} coverUrl={n.cover_url} coverColor={n.cover_color} palette={idx + 2} className="w-full shadow-sm" />
                         <div className="mt-3 min-w-0">
                           <h3 className="font-serif font-semibold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-1">{n.title}</h3>
                           {n.status === "completed" ? (
@@ -456,3 +456,4 @@ function PublicProfile() {
     </div>
   );
 }
+

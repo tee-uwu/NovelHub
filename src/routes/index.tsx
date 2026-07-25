@@ -113,7 +113,7 @@ function Discover() {
                       params={{ novelId: b.slug }}
                       className="group flex flex-col"
                     >
-                      <BookCover title={b.title} coverUrl={b.cover_url} palette={idx} />
+                      <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={idx} />
                       <div className="mt-3 space-y-1">
                         <Badge variant="outline" className="text-xs">{b.genre}</Badge>
                         <h3 className="font-serif text-base font-semibold group-hover:text-primary leading-tight truncate">{b.title}</h3>
@@ -141,7 +141,7 @@ function Discover() {
                         params={{ novelId: b.slug }}
                         className="group flex flex-col"
                       >
-                        <BookCover title={b.title} coverUrl={b.cover_url} palette={idx + 2} />
+                        <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={idx + 2} />
                         <div className="mt-3 space-y-1">
                           <Badge variant="outline" className="text-xs">{b.genre}</Badge>
                           <h3 className="font-serif text-base font-semibold group-hover:text-primary leading-tight truncate">{b.title}</h3>
@@ -187,7 +187,7 @@ function Discover() {
                         >
                           <Card className="relative overflow-hidden border-0 bg-transparent p-0 shadow-none transition-transform hover:-translate-y-1">
                             <div className="relative">
-                              <BookCover title={b.title} coverUrl={b.cover_url} palette={idx} />
+                              <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={idx} />
                               <div className="absolute -top-2 -left-2 grid h-10 w-10 place-items-center rounded-full bg-primary font-serif text-lg font-bold text-primary-foreground shadow-lg">
                                 {idx + 1}
                               </div>
@@ -215,3 +215,4 @@ function Discover() {
     </div>
   );
 }
+

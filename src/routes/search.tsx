@@ -161,7 +161,7 @@ function Search() {
                 >
                   <Card className="flex gap-4 p-4 transition-all hover:bg-card/80 hover:border-primary/30 card-hover w-full items-start shadow-sm">
                     <div className="w-16 shrink-0">
-                      <BookCover title={b.title} coverUrl={b.cover_url} palette={idx} className="w-full shadow-sm" />
+                      <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={idx} className="w-full shadow-sm" />
                     </div>
                     <div className="min-w-0 flex-1 space-y-1.5">
                       <div className="flex flex-wrap gap-1.5 items-center justify-between">
@@ -186,3 +186,4 @@ function Search() {
     </div>
   );
 }
+

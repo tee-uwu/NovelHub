@@ -91,6 +91,7 @@ function UploadPage() {
   
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [coverColor, setCoverColor] = useState<string>("#334155");
   
   // First Chapter writing state
   const [firstChapterTitle, setFirstChapterTitle] = useState("Chapter 1: The Beginning");
@@ -179,6 +180,7 @@ function UploadPage() {
         tags,
         status: isDraft ? "draft" : status,
         cover_url: coverUrl,
+        cover_color: coverColor,
       }, {
         onSuccess: async (newNovel) => {
           // If first chapter content is provided, create it!
@@ -407,7 +409,21 @@ function UploadPage() {
                     <p className="text-xs text-muted-foreground">Upload JPG or PNG. 2:3 aspect ratio recommended.</p>
                   </div>
                 )}
-                <div className="relative">
+                
+                <div className="mt-2 space-y-1">
+                  <Label className="text-xs">Fallback / Background Color</Label>
+                  <div className="flex gap-2 items-center">
+                    <Input 
+                      type="color" 
+                      value={coverColor} 
+                      onChange={(e) => setCoverColor(e.target.value)} 
+                      className="w-12 h-8 p-1 cursor-pointer"
+                    />
+                    <span className="text-xs text-muted-foreground uppercase">{coverColor}</span>
+                  </div>
+                </div>
+
+                <div className="relative mt-2">
                   <Input
                     type="file"
                     accept="image/*"

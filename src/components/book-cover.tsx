@@ -2,6 +2,7 @@ type Props = {
   title: string;
   palette?: number;
   coverUrl?: string | null;
+  coverColor?: string | null;
   className?: string;
 };
 
@@ -31,12 +32,15 @@ function fixImageUrl(url: string) {
   }
 }
 
-export function BookCover({ title, palette = 0, coverUrl, className = "" }: Props) {
-  const p = palettes[palette % palettes.length];
+export function BookCover({ title, palette = 0, coverUrl, coverColor, className = "" }: Props) {
+  const p = coverColor ? "" : palettes[palette % palettes.length];
 
   if (coverUrl) {
     return (
-      <div className={`relative aspect-[2/3] w-full overflow-hidden rounded-md shadow-md book-hover ${className}`}>
+      <div 
+        className={`relative aspect-[2/3] w-full overflow-hidden rounded-md shadow-md book-hover ${className}`}
+        style={coverColor ? { backgroundColor: coverColor } : {}}
+      >
         <img 
           src={fixImageUrl(coverUrl)} 
           alt={title} 
@@ -52,9 +56,10 @@ export function BookCover({ title, palette = 0, coverUrl, className = "" }: Prop
 
   return (
     <div
-      className={`relative flex aspect-[2/3] w-full items-end overflow-hidden rounded-md bg-gradient-to-br shadow-md book-hover ${p} ${className}`}
+      className={`relative flex aspect-[2/3] w-full items-end overflow-hidden rounded-md shadow-md book-hover ${!coverColor ? 'bg-gradient-to-br ' + p : ''} ${className}`}
+      style={coverColor ? { backgroundColor: coverColor } : {}}
     >
-      <div className="absolute inset-0 opacity-20 mix-blend-overlay [background-image:radial-gradient(circle_at_30%_20%,white,transparent_60%)]" />
+      {!coverColor && <div className="absolute inset-0 opacity-20 mix-blend-overlay [background-image:radial-gradient(circle_at_30%_20%,white,transparent_60%)]" />}
       <div className="relative z-10 p-3">
         <p className="font-serif text-sm leading-tight text-white drop-shadow">{title}</p>
       </div>

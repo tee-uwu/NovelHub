@@ -61,6 +61,7 @@ export type Database = {
           genre: string
           tags: string[]
           status: Database["public"]["Enums"]["novel_status"]
+          cover_color: string | null
           cover_url: string | null
           is_featured: boolean
           is_certified: boolean
@@ -79,6 +80,7 @@ export type Database = {
           genre?: string
           tags?: string[]
           status?: Database["public"]["Enums"]["novel_status"]
+          cover_color?: string | null
           cover_url?: string | null
           is_featured?: boolean
           is_certified?: boolean
@@ -97,6 +99,7 @@ export type Database = {
           genre?: string
           tags?: string[]
           status?: Database["public"]["Enums"]["novel_status"]
+          cover_color?: string | null
           cover_url?: string | null
           is_featured?: boolean
           is_certified?: boolean

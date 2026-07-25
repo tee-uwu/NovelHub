@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
+import { Loader2, Upload, Image as ImageIcon } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: Settings,
@@ -67,6 +67,7 @@ function Settings() {
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [role, setRole] = useState<"reader" | "author" | "illustrator" | "editor" | "admin">("reader");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   // Sync state when profile loads
@@ -99,16 +100,37 @@ function Settings() {
   // Profile save mutation
   const saveMutation = useMutation({
     mutationFn: async () => {
+      let finalAvatarUrl = avatarUrl;
+      
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split(".").pop();
+        const fileName = `${user.id}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        const filePath = `${user.id}/${fileName}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, avatarFile, { upsert: true });
+          
+        if (uploadError) {
+          throw new Error("Failed to upload avatar image: " + uploadError.message);
+        }
+        
+        const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+        finalAvatarUrl = data.publicUrl;
+      }
+      
       const { data, error } = await supabase
         .from("profiles")
-        .update({ display_name: displayName, bio, role, avatar_url: avatarUrl })
+        .update({ display_name: displayName, bio, role, avatar_url: finalAvatarUrl })
         .eq("id", user.id)
         .select()
         .single();
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setAvatarUrl(data.avatar_url || "");
+      setAvatarFile(null);
       queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
       toast.success("Settings saved successfully!");
     },
@@ -162,12 +184,55 @@ function Settings() {
               <Input type="email" value={user.email ?? ""} disabled className="opacity-60" />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <Label>Avatar Image URL</Label>
-              <Input
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="e.g. https://images.unsplash.com/photo-xxx"
-              />
+              <Label>Avatar Image (Optional)</Label>
+              <div className="flex items-center gap-4 mt-2">
+                <div className="relative h-16 w-16 overflow-hidden rounded-full border bg-muted shrink-0">
+                  {avatarFile ? (
+                    <img src={URL.createObjectURL(avatarFile)} alt="Preview" className="h-full w-full object-cover" />
+                  ) : avatarUrl ? (
+                    <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center">
+                      <ImageIcon className="h-6 w-6 text-muted-foreground/50" />
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-2 flex-1">
+                  <div className="relative inline-block">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+                      className="absolute inset-0 cursor-pointer opacity-0"
+                    />
+                    <Button variant="outline" size="sm">
+                      <Upload className="mr-2 h-4 w-4" /> Upload Picture
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={avatarUrl}
+                      onChange={(e) => setAvatarUrl(e.target.value)}
+                      placeholder="Or paste an image URL..."
+                      className="h-8 text-xs"
+                      disabled={!!avatarFile}
+                    />
+                    {(avatarFile || avatarUrl) && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-xs h-8 text-destructive"
+                        onClick={() => {
+                          setAvatarFile(null);
+                          setAvatarUrl("");
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="space-y-1.5">
               <Label>Your Role</Label>

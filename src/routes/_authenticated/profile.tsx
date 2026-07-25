@@ -221,7 +221,7 @@ function Profile() {
                     {libraryItems.map((b, idx) => (
                       <Link key={b.id} to="/read" search={{ novelId: b.novel_id }}>
                         <Card className="flex gap-3 p-4 card-hover h-full">
-                          <BookCover title={b.novel?.title || ""} coverUrl={b.novel?.cover_url} palette={idx} className="w-16 shrink-0" />
+                          <BookCover title={b.novel?.title || ""} coverUrl={b.novel?.cover_url} coverColor={b.novel?.cover_color} palette={idx} className="w-16 shrink-0" />
                           <div className="flex-1 min-w-0">
                             <h3 className="font-serif font-semibold truncate">{b.novel?.title}</h3>
                             <p className="mt-1 text-xs text-muted-foreground">Chapter {b.current_chapter} of {b.progress}%</p>
@@ -244,7 +244,7 @@ function Profile() {
                     {novels.map((b, idx) => (
                       <Link key={b.id} to="/novel/$novelId" params={{ novelId: b.slug }} className="group flex flex-col">
                         <Card className="p-3 card-hover h-full flex flex-col justify-between">
-                          <BookCover title={b.title} coverUrl={b.cover_url} palette={idx + 2} className="w-full shadow-sm" />
+                          <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={idx + 2} className="w-full shadow-sm" />
                           <div className="mt-3 min-w-0">
                             <h3 className="font-serif font-semibold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-1">{b.title}</h3>
                             {b.status === "completed" ? (
@@ -333,7 +333,7 @@ function Profile() {
               <ul className="space-y-4">
                 {libraryItems.slice(0, 3).map((b, idx) => (
                   <li key={b.id} className="flex gap-3">
-                    <BookCover title={b.novel?.title || ""} coverUrl={b.novel?.cover_url} palette={idx} className="w-10 shrink-0" />
+                    <BookCover title={b.novel?.title || ""} coverUrl={b.novel?.cover_url} coverColor={b.novel?.cover_color} palette={idx} className="w-10 shrink-0" />
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-sm font-medium">{b.novel?.title}</div>
                       <div className="text-xs text-muted-foreground">Ch {b.current_chapter}</div>
@@ -370,3 +370,4 @@ function Profile() {
     </div>
   );
 }
+

@@ -70,7 +70,7 @@ function Rankings() {
                     <div className="relative mb-3">
                       <BookCover
                         title={book2.title}
-                        coverUrl={book2.cover_url}
+                        coverUrl={book2.cover_url} coverColor={book2.cover_color}
                         palette={2}
                         className="w-28 shadow-lg rounded-lg border-2 border-slate-300"
                       />
@@ -105,7 +105,7 @@ function Rankings() {
                     <div className="relative mb-3">
                       <BookCover
                         title={book1.title}
-                        coverUrl={book1.cover_url}
+                        coverUrl={book1.cover_url} coverColor={book1.cover_color}
                         palette={1}
                         className="w-32 shadow-2xl rounded-lg border-2 border-amber-400"
                       />
@@ -140,7 +140,7 @@ function Rankings() {
                     <div className="relative mb-3">
                       <BookCover
                         title={book3.title}
-                        coverUrl={book3.cover_url}
+                        coverUrl={book3.cover_url} coverColor={book3.cover_color}
                         palette={3}
                         className="w-28 shadow-lg rounded-lg border-2 border-amber-700"
                       />
@@ -191,7 +191,7 @@ function Rankings() {
                           {rankNum}
                         </div>
                         <div className="w-11 shrink-0">
-                          <BookCover title={b.title} coverUrl={b.cover_url} palette={rankNum} />
+                          <BookCover title={b.title} coverUrl={b.cover_url} coverColor={b.cover_color} palette={rankNum} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <h3 className="truncate font-serif text-base font-semibold hover:text-primary transition-colors">{b.title}</h3>
@@ -217,3 +217,4 @@ function Rankings() {
     </div>
   );
 }
+

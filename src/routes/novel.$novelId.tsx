@@ -435,6 +435,7 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
   const [customGenre, setCustomGenre] = useState(isDefaultGenre ? "" : (novel?.genre || ""));
   const [status, setStatus] = useState(novel?.status || "ongoing");
   const [coverUrl, setCoverUrl] = useState(novel?.cover_url || "");
+  const [coverColor, setCoverColor] = useState(novel?.cover_color || "#334155");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
@@ -448,6 +449,7 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
       setCustomGenre(isDefault ? "" : novel.genre);
       setStatus(novel.status);
       setCoverUrl(novel.cover_url || "");
+      setCoverColor(novel.cover_color || "#334155");
     }
   }, [novel, open]);
 
@@ -456,7 +458,7 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
       const finalGenre = selectedGenreOption === "custom" ? customGenre.trim() : selectedGenreOption;
       const { data, error } = await supabase
         .from("novels")
-        .update({ title, synopsis, genre: finalGenre, status, cover_url: coverUrl.trim() || null })
+        .update({ title, synopsis, genre: finalGenre, status, cover_url: coverUrl.trim() || null, cover_color: coverColor })
         .eq("id", novel.id)
         .select()
         .single();
@@ -511,6 +513,18 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
           <div>
             <Label htmlFor="set-cover">Cover Image URL</Label>
             <Input id="set-cover" value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} placeholder="https://example.com/cover.jpg" />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Fallback / Background Color</Label>
+            <div className="flex gap-2 items-center">
+              <Input 
+                type="color" 
+                value={coverColor} 
+                onChange={(e) => setCoverColor(e.target.value)} 
+                className="w-12 h-8 p-1 cursor-pointer"
+              />
+              <span className="text-xs text-muted-foreground uppercase">{coverColor}</span>
+            </div>
           </div>
           <div>
             <Label htmlFor="set-synopsis">Synopsis</Label>
@@ -664,7 +678,7 @@ function NovelDetail() {
       <TopNav />
       <div className="border-b bg-muted/30">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[220px_1fr]">
-          <BookCover title={novel.title} coverUrl={novel.cover_url} palette={1} className="w-full max-w-[220px]" />
+          <BookCover title={novel.title} coverUrl={novel.cover_url} coverColor={novel.cover_color} palette={1} className="w-full max-w-[220px]" />
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               <Badge>{novel.genre}</Badge>
@@ -923,3 +937,4 @@ function NovelDetail() {
     </div>
   );
 }
+

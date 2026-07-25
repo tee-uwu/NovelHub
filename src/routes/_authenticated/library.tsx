@@ -53,7 +53,7 @@ function Library() {
                 reading.map((item, idx) => (
                   <Link key={item.id} to="/read" search={{ novelId: item.novel_id }}>
                     <Card className="flex items-center gap-4 p-4 transition-colors hover:bg-muted/40 card-hover">
-                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} palette={idx} className="w-16 shrink-0" />
+                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} coverColor={item.novel?.cover_color} palette={idx} className="w-16 shrink-0" />
                       <div className="min-w-0 flex-1 space-y-2">
                         <div>
                           <h3 className="truncate font-serif font-semibold">{item.novel?.title}</h3>
@@ -86,7 +86,7 @@ function Library() {
                       params={{ novelId: item.novel?.slug || "" }}
                       className="group"
                     >
-                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} palette={idx} />
+                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} coverColor={item.novel?.cover_color} palette={idx} />
                       <h3 className="mt-2 truncate font-serif text-sm font-semibold group-hover:text-primary">{item.novel?.title}</h3>
                       <p className="truncate text-xs text-muted-foreground">by {item.novel?.author?.display_name}</p>
                     </Link>
@@ -111,7 +111,7 @@ function Library() {
                       params={{ novelId: item.novel?.slug || "" }}
                       className="group"
                     >
-                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} palette={idx} />
+                      <BookCover title={item.novel?.title || ""} coverUrl={item.novel?.cover_url} coverColor={item.novel?.cover_color} palette={idx} />
                       <h3 className="mt-2 truncate font-serif text-sm font-semibold group-hover:text-primary">{item.novel?.title}</h3>
                       <p className="truncate text-xs text-muted-foreground">by {item.novel?.author?.display_name}</p>
                     </Link>
@@ -125,3 +125,4 @@ function Library() {
     </div>
   );
 }
+

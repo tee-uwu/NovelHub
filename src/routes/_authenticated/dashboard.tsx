@@ -485,7 +485,7 @@ function Dashboard() {
                 <Card key={n.id} className="flex flex-col justify-between p-5 card-hover relative overflow-hidden">
                   <div className="flex gap-4">
                     <div className="w-24 shrink-0">
-                      <BookCover title={n.title} coverUrl={n.cover_url} palette={idx} className="w-full" />
+                      <BookCover title={n.title} coverUrl={n.cover_url} coverColor={n.cover_color} palette={idx} className="w-full" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2">
                       <div className="flex flex-wrap gap-1.5">
@@ -533,7 +533,7 @@ function Dashboard() {
                   <Card key={col.id} className="flex flex-col justify-between p-5 card-hover relative overflow-hidden">
                     <div className="flex gap-4">
                       <div className="w-24 shrink-0">
-                        <BookCover title={n.title} coverUrl={n.cover_url} palette={idx + 4} className="w-full" />
+                        <BookCover title={n.title} coverUrl={n.cover_url} coverColor={n.cover_color} palette={idx + 4} className="w-full" />
                       </div>
                       <div className="flex-1 min-w-0 space-y-1">
                         <h3 className="font-serif text-lg font-bold leading-tight line-clamp-2">{n.title}</h3>
@@ -666,3 +666,4 @@ function Dashboard() {
     </div>
   );
 }
+

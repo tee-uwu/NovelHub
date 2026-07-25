@@ -76,8 +76,9 @@ export function useCreateNovel() {
       synopsis?: string;
       genre?: string;
       tags?: string[];
-      status?: "draft" | "ongoing" | "completed" | "hiatus";
+      status: Database["public"]["Enums"]["novel_status"];
       cover_url?: string | null;
+      cover_color?: string | null;
     }) => {
       const { data, error } = await supabase.from("novels").insert(novel).select().single();
       if (error) throw error;
@@ -96,7 +97,7 @@ export function useCreateNovel() {
 export function useUpdateNovel() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...updates }: { id: string; title?: string; synopsis?: string; genre?: string; tags?: string[]; status?: string; cover_url?: string | null }) => {
+    mutationFn: async ({ id, ...updates }: { id: string; title?: string; synopsis?: string; genre?: string; tags?: string[]; status?: string; cover_url?: string | null; cover_color?: string | null }) => {
       const { data, error } = await supabase.from("novels").update(updates).eq("id", id).select().single();
       if (error) throw error;
       return data;
