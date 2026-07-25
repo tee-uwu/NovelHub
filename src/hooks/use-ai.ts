@@ -26,7 +26,7 @@ export function useAIBrainstorm() {
   useEffect(() => {
     if (genAI && !chatSessionRef.current) {
       try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
         chatSessionRef.current = model.startChat({
           history: [
             {
@@ -83,7 +83,7 @@ export function useAIBrainstorm() {
 
   const clearChat = useCallback(() => {
     if (genAI) {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+      const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
       chatSessionRef.current = model.startChat({
         history: [
           {
