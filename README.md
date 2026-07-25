@@ -1,19 +1,19 @@
-# 📚 NovelHub
+#  NovelHub
 
 NovelHub is a modern, collaborative platform for writers, readers, editors, and illustrators to come together and bring stories to life. Discover trending novels, find collaborators for your next masterpiece, or immerse yourself in a vibrant community of literature enthusiasts.
 
 ![NovelHub Preview](https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_jpg/cloudinary-tools-uploads/pjco7wo32opu2jgcmi76)
 
-## ✨ Features
+## Features
 
-- **📖 Immersive Reading Experience**: Read novels with a beautiful, customizable reader interface.
-- **🤝 Collaborative Writing**: Post ads for editors or illustrators and collaborate with others on your novels.
-- **🏆 Trending & Editors Choice**: Discover the hottest novels and editor-curated picks.
-- **💬 Community & Social**: Join genre-specific communities, discuss chapters, leave reviews, and chat with fellow readers.
-- **🛡️ Robust Moderation**: Admin dashboard to review pending novels, handle reports, and manage verified authors.
-- **🎨 Modern Design**: Built with a stunning, responsive, and dynamic UI for a premium aesthetic.
+- ** Immersive Reading Experience**: Read novels with a beautiful, customizable reader interface.
+- ** Collaborative Writing**: Post ads for editors or illustrators and collaborate with others on your novels.
+- ** Trending & Editors Choice**: Discover the hottest novels and editor-curated picks.
+- ** Community & Social**: Join genre-specific communities, discuss chapters, leave reviews, and chat with fellow readers.
+- ** Robust Moderation**: Admin dashboard to review pending novels, handle reports, and manage verified authors.
+- ** Modern Design**: Built with a stunning, responsive, and dynamic UI for a premium aesthetic.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend**: React, TypeScript, Vite
 - **Routing**: TanStack Router
@@ -21,7 +21,7 @@ NovelHub is a modern, collaborative platform for writers, readers, editors, and 
 - **Backend & Auth**: Supabase (PostgreSQL, Row Level Security)
 - **State Management**: TanStack Query (React Query)
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -71,7 +71,7 @@ Contributions are what make the open-source community such an amazing place to l
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 🌟 Acknowledgements
+##  Acknowledgements
 
 - [Supabase](https://supabase.com)
 - [TanStack Router](https://tanstack.com/router/latest)
