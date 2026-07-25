@@ -232,7 +232,14 @@ function Reader() {
             <div className="my-6 grid gap-4 sm:grid-cols-2">
               {(chapter as any).featured_images.map((img: string, idx: number) => (
                 <div key={idx} className="relative aspect-[16/9] sm:aspect-[4/3] w-full overflow-hidden rounded-lg border shadow-sm group bg-muted">
-                  <img src={img} alt={`Illustration ${idx + 1}`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img 
+                    src={fixImageUrl(img)} 
+                    alt={`Illustration ${idx + 1}`} 
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://placehold.co/600x400/1e293b/white?text=Invalid+Image+Link";
+                    }}
+                  />
                 </div>
               ))}
             </div>

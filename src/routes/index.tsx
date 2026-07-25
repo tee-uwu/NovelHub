@@ -38,6 +38,31 @@ function Discover() {
   return (
     <div className="min-h-screen">
       <TopNav />
+      
+      {/* Hero Section */}
+      {!selectedGenre && (
+        <div className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background pt-16 pb-12 sm:pt-24 sm:pb-16 lg:pb-24">
+          <div className="absolute -top-40 -right-40 -z-10 h-96 w-96 rounded-full bg-primary/20 blur-[100px]" />
+          <div className="absolute top-20 -left-20 -z-10 h-72 w-72 rounded-full bg-accent/20 blur-[80px]" />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+            <h1 className="mx-auto max-w-4xl font-serif text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+              Discover Your Next <span className="text-primary italic font-light">Masterpiece</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+              Dive into thousands of original novels written by talented creators. From epic fantasies to heart-wrenching romances, your next great adventure begins here.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Link to="/search" className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all hover:scale-105 duration-200 hover:shadow-lg hover:shadow-primary/25">
+                Start Reading
+              </Link>
+              <Link to="/upload" className="text-sm font-semibold leading-6 text-foreground flex items-center gap-1 hover:text-primary transition-colors">
+                Publish a novel <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto flex max-w-7xl gap-8 px-4 py-8 sm:px-6">
         {/* Sidebar */}
         <aside className="hidden w-56 shrink-0 lg:block">

@@ -217,6 +217,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["novels"] });
       toast.success("Novel approved and published!");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to approve novel");
+    }
   });
 
   const rejectMutation = useMutation({
@@ -228,6 +231,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["admin-pending-novels"] });
       toast.success("Novel rejected.");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to reject novel");
+    }
   });
 
   // Chapter approval mutations
@@ -272,6 +278,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["novels"] });
       toast.success("Editors Choice status updated!");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to update Editors Choice status");
+    }
   });
 
   // Delete novel
@@ -286,6 +295,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["novels"] });
       toast.success("Novel permanently deleted.");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to delete novel");
+    }
   });
 
   // Ban toggle user
@@ -298,6 +310,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["admin-profiles"] });
       toast.success("User ban status updated!");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to update ban status");
+    }
   });
 
   // Verify toggle user
@@ -310,6 +325,9 @@ function AdminPanel() {
       queryClient.invalidateQueries({ queryKey: ["admin-profiles"] });
       toast.success("User verification status updated!");
     },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to update verification status");
+    }
   });
 
   const handleEditBadgesClick = (p: any) => {
