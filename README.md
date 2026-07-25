@@ -2,7 +2,7 @@
 
 NovelHub is a modern, collaborative platform for writers, readers, editors, and illustrators to come together and bring stories to life. Discover trending novels, find collaborators for your next masterpiece, or immerse yourself in a vibrant community of literature enthusiasts.
 
-![NovelHub Preview](https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop)
+![NovelHub Preview]([https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop](https://imgur.com/a/XCWawBZ))
 
 ## ✨ Features
 
