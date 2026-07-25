@@ -14,7 +14,12 @@ export interface ChatMessage {
   content: string;
 }
 
-export function useAIBrainstorm() {
+export interface UseAIAssistantProps {
+  systemInstruction: string;
+  initialMessage: string;
+}
+
+export function useAIAssistant({ systemInstruction, initialMessage }: UseAIAssistantProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,11 +36,11 @@ export function useAIBrainstorm() {
           history: [
             {
               role: "user",
-              parts: [{ text: "You are an AI Brainstorming Assistant for an author writing a novel. Keep your answers creative, helpful, and concise. Help them overcome writer's block, generate names, or outline plot points." }],
+              parts: [{ text: systemInstruction }],
             },
             {
               role: "model",
-              parts: [{ text: "I'm ready to help you brainstorm! What are we working on today?" }],
+              parts: [{ text: initialMessage }],
             }
           ],
         });
@@ -43,13 +48,13 @@ export function useAIBrainstorm() {
         // Add the initial welcome message to the UI state
         setMessages([{
           role: "model",
-          content: "I'm ready to help you brainstorm! What are we working on today?"
+          content: initialMessage
         }]);
       } catch (err: any) {
         console.error("Error initializing Gemini Chat:", err);
       }
     }
-  }, []);
+  }, [systemInstruction, initialMessage]);
 
   const sendMessage = useCallback(async (prompt: string) => {
     if (!isConfigured || !chatSessionRef.current) {
@@ -88,20 +93,20 @@ export function useAIBrainstorm() {
         history: [
           {
             role: "user",
-            parts: [{ text: "You are an AI Brainstorming Assistant for an author writing a novel. Keep your answers creative, helpful, and concise. Help them overcome writer's block, generate names, or outline plot points." }],
+            parts: [{ text: systemInstruction }],
           },
           {
             role: "model",
-            parts: [{ text: "I'm ready to help you brainstorm! What are we working on today?" }],
+            parts: [{ text: initialMessage }],
           }
         ],
       });
       setMessages([{
         role: "model",
-        content: "I'm ready to help you brainstorm! What are we working on today?"
+        content: initialMessage
       }]);
     }
-  }, []);
+  }, [systemInstruction, initialMessage]);
 
   return {
     messages,

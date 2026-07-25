@@ -32,7 +32,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAIBrainstorm } from "@/hooks/use-ai";
+import { useAIAssistant } from "@/hooks/use-ai";
 import {
   Select,
   SelectContent,
@@ -87,7 +87,10 @@ function WorkspacePage() {
 
   // AI Brainstorming State
   const [aiPrompt, setAiPrompt] = useState("");
-  const { messages: aiMessages, sendMessage: sendAiMessage, isLoading: aiLoading, isConfigured: aiConfigured, clearChat: clearAiChat, error: aiError } = useAIBrainstorm();
+  const { messages: aiMessages, sendMessage: sendAiMessage, isLoading: aiLoading, isConfigured: aiConfigured, clearChat: clearAiChat, error: aiError } = useAIAssistant({
+    systemInstruction: "You are an AI Brainstorming Assistant for an author writing a novel. Keep your answers creative, helpful, and concise. Help them overcome writer's block, generate names, or outline plot points.",
+    initialMessage: "I'm ready to help you brainstorm! What are we working on today?"
+  });
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const aiEndRef = useRef<HTMLDivElement>(null);
 

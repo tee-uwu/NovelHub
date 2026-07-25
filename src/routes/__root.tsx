@@ -13,6 +13,7 @@ import { Instagram, Github } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { GlobalChatbot } from "@/components/global-chatbot";
 
 function NotFoundComponent() {
   return (
@@ -176,6 +177,7 @@ function RootComponent() {
         </footer>
       </div>
       <Toaster richColors position="top-right" />
+      <GlobalChatbot />
     </QueryClientProvider>
   );
 }
