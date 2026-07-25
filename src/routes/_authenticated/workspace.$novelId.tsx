@@ -87,7 +87,7 @@ function WorkspacePage() {
 
   // AI Brainstorming State
   const [aiPrompt, setAiPrompt] = useState("");
-  const { messages: aiMessages, sendMessage: sendAiMessage, isLoading: aiLoading, isConfigured: aiConfigured, clearChat: clearAiChat } = useAIBrainstorm();
+  const { messages: aiMessages, sendMessage: sendAiMessage, isLoading: aiLoading, isConfigured: aiConfigured, clearChat: clearAiChat, error: aiError } = useAIBrainstorm();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const aiEndRef = useRef<HTMLDivElement>(null);
 
@@ -314,6 +314,11 @@ function WorkspacePage() {
                   {aiLoading && (
                     <div className="flex items-center gap-2 text-muted-foreground text-sm p-4">
                       <Loader2 className="h-4 w-4 animate-spin" /> AI is thinking...
+                    </div>
+                  )}
+                  {aiError && (
+                    <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
+                      <strong>Error:</strong> {aiError}
                     </div>
                   )}
                   <div ref={aiEndRef} />
