@@ -21,9 +21,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Send, MoreVertical, X, LayoutDashboard, MessageSquare, BookOpen, Edit, LogOut } from "lucide-react";
+import { Loader2, Plus, Send, MoreVertical, X, LayoutDashboard, MessageSquare, BookOpen, Edit, LogOut, BrainCircuit, Sparkles, Copy, Check } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useAIBrainstorm } from "@/hooks/use-ai";
 import {
   Select,
   SelectContent,
@@ -75,6 +84,25 @@ function WorkspacePage() {
   const [showWriteDialog, setShowWriteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<any>(null);
+
+  // AI Brainstorming State
+  const [aiPrompt, setAiPrompt] = useState("");
+  const { messages: aiMessages, sendMessage: sendAiMessage, isLoading: aiLoading, isConfigured: aiConfigured, clearChat: clearAiChat } = useAIBrainstorm();
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const aiEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (aiEndRef.current) {
+      aiEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [aiMessages]);
+
+  const handleCopyAiResponse = (text: string, index: number) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+    toast.success("Copied to clipboard!");
+  };
 
   useEffect(() => {
     if (activeTab === "chat" && chatEndRef.current) {
@@ -235,7 +263,102 @@ function WorkspacePage() {
               Chapters
             </button>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="bg-primary/5 border-primary/20 text-primary hover:bg-primary/10">
+                  <BrainCircuit className="h-4 w-4 mr-2" />
+                  Brainstorm AI
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
+                <SheetHeader className="p-6 pb-4 border-b bg-muted/30">
+                  <SheetTitle className="flex items-center gap-2 font-serif text-2xl text-primary">
+                    <Sparkles className="h-5 w-5" /> AI Brainstorming
+                  </SheetTitle>
+                  <SheetDescription>
+                    Your private AI assistant to generate names, outline plots, or overcome writer's block.
+                  </SheetDescription>
+                </SheetHeader>
+                
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {!aiConfigured && (
+                    <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20">
+                      <strong>AI Not Configured:</strong> Please add your <code>VITE_GEMINI_API_KEY</code> to the .env file and restart the server.
+                    </div>
+                  )}
+                  {aiMessages.map((msg, i) => (
+                    <div key={i} className={`flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                      <div className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+                        msg.role === 'user' 
+                          ? 'bg-primary text-primary-foreground rounded-br-sm' 
+                          : 'bg-muted rounded-bl-sm border shadow-sm'
+                      }`}>
+                        <div className="text-sm whitespace-pre-wrap leading-relaxed">
+                          {msg.content}
+                        </div>
+                      </div>
+                      {msg.role === 'model' && msg.content && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-[10px] text-muted-foreground mt-1"
+                          onClick={() => handleCopyAiResponse(msg.content, i)}
+                        >
+                          {copiedIndex === i ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
+                          {copiedIndex === i ? "Copied" : "Copy to Editor"}
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                  {aiLoading && (
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm p-4">
+                      <Loader2 className="h-4 w-4 animate-spin" /> AI is thinking...
+                    </div>
+                  )}
+                  <div ref={aiEndRef} />
+                </div>
+
+                <div className="p-4 border-t bg-background">
+                  <div className="flex gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide">
+                    <Button variant="secondary" size="sm" className="text-xs whitespace-nowrap" onClick={() => setAiPrompt("Generate 5 unique names for a sci-fi villain.")}>Names</Button>
+                    <Button variant="secondary" size="sm" className="text-xs whitespace-nowrap" onClick={() => setAiPrompt("Give me a plot twist for chapter 3.")}>Plot Twist</Button>
+                    <Button variant="secondary" size="sm" className="text-xs whitespace-nowrap" onClick={() => setAiPrompt("Describe a bustling medieval market in detail.")}>Setting</Button>
+                    <Button variant="ghost" size="sm" className="text-xs text-muted-foreground ml-auto" onClick={clearAiChat}>Clear Chat</Button>
+                  </div>
+                  <form 
+                    className="flex gap-2"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (aiPrompt.trim()) {
+                        sendAiMessage(aiPrompt);
+                        setAiPrompt("");
+                      }
+                    }}
+                  >
+                    <Textarea 
+                      placeholder="Ask the AI for ideas..."
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      className="min-h-[40px] max-h-[120px] resize-y py-2"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          if (aiPrompt.trim()) {
+                            sendAiMessage(aiPrompt);
+                            setAiPrompt("");
+                          }
+                        }
+                      }}
+                    />
+                    <Button type="submit" size="icon" disabled={aiLoading || !aiPrompt.trim()}>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </form>
+                </div>
+              </SheetContent>
+            </Sheet>
+
             {!isAuthor && isAcceptedCollab && (
               <Button 
                 variant="ghost" 
