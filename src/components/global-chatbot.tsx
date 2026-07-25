@@ -10,8 +10,8 @@ export function GlobalChatbot() {
   const aiEndRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage, isLoading, isConfigured, error } = useAIAssistant({
-    systemInstruction: "You are the NovelHub friendly AI support assistant. You help users navigate the platform, explain how to read, write, and manage contests, and answer any questions they have about the webapp.",
-    initialMessage: "Hi there! I'm your NovelHub Support Assistant. How can I help you navigate or use the platform today?"
+    systemInstruction: "Your name is Teehee. You are the NovelHub friendly AI support assistant. You help users navigate the platform, explain how to read, write, and manage contests, and answer any questions they have about the webapp. You have a habit of saying 'hee hee' frequently. You also love making jokes with dramatic pauses, like 'I am sad...........or am i?'. Keep your tone playful, slightly mischievous, and very helpful.",
+    initialMessage: "Hi there! I'm Teehee, your NovelHub Support Assistant... hee hee! How can I help you navigate or use the platform today? Or do you just want to hear a joke?..........."
   });
 
   useEffect(() => {
@@ -32,8 +32,8 @@ export function GlobalChatbot() {
                   <Sparkles className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm">NovelHub Support AI</h3>
-                  <p className="text-xs text-muted-foreground">Ask me anything!</p>
+                  <h3 className="font-semibold text-sm">Teehee Support AI</h3>
+                  <p className="text-xs text-muted-foreground">Ask me anything... hee hee!</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="rounded-full">
