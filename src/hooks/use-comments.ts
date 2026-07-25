@@ -26,6 +26,7 @@ export function useCreateComment() {
       user_id: string;
       content: string;
       parent_id?: string;
+      paragraph_index?: number;
     }) => {
       const { data, error } = await supabase.from("comments").insert(comment).select().single();
       if (error) throw error;

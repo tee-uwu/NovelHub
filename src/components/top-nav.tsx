@@ -18,6 +18,7 @@ const links = [
   { to: "/", label: "Discover" },
   { to: "/rankings", label: "Rankings" },
   { to: "/community", label: "Community" },
+  { to: "/contests", label: "Contests" },
   { to: "/dashboard", label: "Create" },
   { to: "/faq", label: "FAQ" },
 ];

@@ -253,7 +253,28 @@ function PublicProfile() {
                 <Badge className="capitalize font-medium">{profile.role}</Badge>
               </div>
               <p className="mt-1 text-sm text-muted-foreground">{profile.bio || "No bio available."}</p>
-              <div className="mt-3 flex gap-6 text-sm">
+              
+              {/* GAMIFICATION STATS */}
+              <div className="mt-4 flex flex-wrap gap-4 rounded-lg bg-muted/50 p-3 shadow-inner border max-w-fit">
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase text-muted-foreground font-semibold tracking-wider">XP</span>
+                  <span className="text-lg font-bold text-primary leading-tight">{profile.xp || 0}</span>
+                </div>
+                <div className="w-px bg-border my-1" />
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase text-muted-foreground font-semibold tracking-wider">Current Streak</span>
+                  <span className="text-lg font-bold text-orange-500 leading-tight flex items-center gap-1">
+                    🔥 {profile.current_streak || 0}
+                  </span>
+                </div>
+                <div className="w-px bg-border my-1" />
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase text-muted-foreground font-semibold tracking-wider">Longest Streak</span>
+                  <span className="text-lg font-bold text-muted-foreground leading-tight">{profile.longest_streak || 0}</span>
+                </div>
+              </div>
+
+              <div className="mt-4 flex gap-6 text-sm">
                 <button onClick={() => handleOpenFollows("following")} className="hover:underline text-left">
                   <span className="font-semibold">{followingCount}</span> <span className="text-muted-foreground">Following</span>
                 </button>

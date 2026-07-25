@@ -8,14 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Star, Users, MessageSquare, Heart, ChevronLeft, ChevronRight, Bookmark, Type } from "lucide-react";
+import { Star, Users, MessageSquare, Heart, ChevronLeft, ChevronRight, Bookmark, Type, Volume2, Play, Pause, Square } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useChapter, usePublicChapters } from "@/hooks/use-chapters";
 import { useComments, useCreateComment } from "@/hooks/use-comments";
 import { useToggleLibrary, useUpdateProgress } from "@/hooks/use-library";
 import { useSession } from "@/hooks/use-session";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
@@ -40,6 +40,13 @@ function parseMarkdown(text: string) {
     .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-6 mb-2 font-serif text-foreground">$1</h3>')
     .replace(/^&gt; (.*$)/gim, '<blockquote class="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground">$1</blockquote>')
     .replace(/---/g, '<hr class="my-6 border-muted" />');
+
+  // Wrap paragraphs for inline comments
+  html = html.split('\n\n').map((p, idx) => {
+    if (!p.trim()) return '';
+    if (p.startsWith('<h') || p.startsWith('<hr')) return p;
+    return `<div class="group relative pr-8 my-4"><p>${p}</p><button class="inline-comment-btn absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary" data-p-idx="${idx}" title="Comment on this paragraph"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></button></div>`;
+  }).join('\n');
 
   return html;
 }
@@ -84,6 +91,27 @@ function Reader() {
   const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const queryClient = useQueryClient();
+
+  // TTS State
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Gamification tracking
+  useEffect(() => {
+    if (user && chapterId) {
+      supabase.rpc("update_reading_streak", { user_uuid: user.id })
+        .then(({ error }) => {
+          if (error) console.error("Error updating streak:", error);
+        });
+    }
+  }, [user, chapterId]);
+
+  // Clean up TTS
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const deleteCommentMutation = useMutation({
     mutationFn: async (commentId: string) => {
@@ -161,10 +189,12 @@ function Reader() {
         chapter_id: chapter!.id,
         user_id: user.id,
         content: commentContent.trim(),
+        paragraph_index: inlineCommentIdx !== null ? inlineCommentIdx : undefined,
       },
       {
         onSuccess: () => {
           setCommentContent("");
+          setInlineCommentIdx(null);
         },
       }
     );
@@ -181,6 +211,54 @@ function Reader() {
         toast.success("Bookmark saved!");
       }
     });
+  }
+
+  function handlePlayAudio() {
+    if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      return;
+    }
+    
+    if (isPlaying) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      return;
+    }
+
+    const textToRead = chapter?.content?.replace(/[#_*>`]/g, "") || "";
+    if (!textToRead) return;
+
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+  }
+
+  function handleStopAudio() {
+    window.speechSynthesis.cancel();
+    setIsPlaying(false);
+    setIsPaused(false);
+  }
+
+  const [inlineCommentIdx, setInlineCommentIdx] = useState<number | null>(null);
+
+  const handleArticleClick = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('inline-comment-btn')) {
+      const pIdx = target.getAttribute('data-p-idx');
+      if (pIdx) {
+        setInlineCommentIdx(parseInt(pIdx, 10));
+        const el = document.getElementById("comment-box");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          el.focus();
+        }
+      }
+    }
   }
 
   return (
@@ -221,6 +299,20 @@ function Reader() {
               <h1 className="mt-1 font-serif text-3xl font-semibold">{chapter.title}</h1>
             </div>
             <div className="flex gap-2">
+              {isPlaying || isPaused ? (
+                <>
+                  <Button variant="outline" size="icon" onClick={handlePlayAudio} title={isPaused ? "Resume Audio" : "Pause Audio"}>
+                    {isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={handleStopAudio} title="Stop Audio">
+                    <Square className="h-4 w-4" />
+                  </Button>
+                </>
+              ) : (
+                <Button variant="outline" size="icon" onClick={handlePlayAudio} title="Play Audiobook">
+                  <Volume2 className="h-4 w-4" />
+                </Button>
+              )}
               <Button variant="ghost" size="icon" onClick={handleSaveBookmark} title="Save Bookmark">
                 <Bookmark className="h-4 w-4" />
               </Button>
@@ -246,8 +338,9 @@ function Reader() {
           )}
 
           <article 
-            className="font-serif text-[18px] leading-8 space-y-6 text-foreground/90 whitespace-pre-wrap"
+            className="font-serif text-[18px] leading-8 text-foreground/90 whitespace-pre-wrap"
             dangerouslySetInnerHTML={{ __html: parseMarkdown(chapter.content) }}
+            onClick={handleArticleClick}
           />
 
           <div className="mt-12 flex items-center justify-between border-t pt-6">
@@ -278,11 +371,20 @@ function Reader() {
 
             {user ? (
               <form onSubmit={handlePostComment} className="mb-6 rounded-lg border bg-card p-4">
+                {inlineCommentIdx !== null && (
+                  <div className="mb-3 flex items-center justify-between bg-muted p-2 rounded-md">
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <MessageSquare className="h-3 w-3" /> Replying to paragraph {inlineCommentIdx + 1}
+                    </span>
+                    <button type="button" onClick={() => setInlineCommentIdx(null)} className="text-xs text-primary hover:underline">Clear</button>
+                  </div>
+                )}
                 <Textarea
+                  id="comment-box"
                   value={commentContent}
                   onChange={(e) => setCommentContent(e.target.value)}
                   placeholder="Share your thoughts on this chapter…"
-                  className="min-h-[80px] resize-none border-0 p-0 shadow-none focus-visible:ring-0"
+                  className="min-h-[80px] resize-none border-0 p-0 shadow-none focus-visible:ring-0 bg-transparent"
                 />
                 <div className="mt-3 flex justify-end">
                   <Button size="sm" type="submit" disabled={createComment.isPending}>
@@ -331,6 +433,11 @@ function Reader() {
                               <span className="text-[10px] text-muted-foreground">
                                 {new Date(c.created_at).toLocaleDateString()}
                               </span>
+                              {c.paragraph_index !== null && c.paragraph_index !== undefined && (
+                                <span className="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded-sm font-medium">
+                                  P{c.paragraph_index + 1}
+                                </span>
+                              )}
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                               {user && !isReplying && (
