@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { Instagram, Github } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -151,8 +152,29 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col">
+        <main className="flex-1">
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </main>
+        
+        {/* Footer */}
+        <footer className="border-t bg-muted/10 py-8">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-3 px-4 sm:px-6">
+            <p className="font-serif text-lg font-medium text-foreground">Made for Authors by</p>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              <a href="https://instagram.com/anxie._.tee" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Instagram className="h-5 w-5" />
+                <span className="text-sm font-medium">anxie._.tee</span>
+              </a>
+              <a href="https://github.com/tee-uwu" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Github className="h-5 w-5" />
+                <span className="text-sm font-medium">tee-uwu</span>
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
