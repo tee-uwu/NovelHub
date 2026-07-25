@@ -13,6 +13,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ReadRouteImport } from './routes/read'
 import { Route as RankingsRouteImport } from './routes/rankings'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContestsRouteImport } from './routes/contests'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as CollabRouteImport } from './routes/collab'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -48,6 +49,11 @@ const RankingsRoute = RankingsRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContestsRoute = ContestsRouteImport.update({
+  id: '/contests',
+  path: '/contests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/collab': typeof CollabRoute
   '/community': typeof CommunityRoute
+  '/contests': typeof ContestsRoute
   '/faq': typeof FaqRoute
   '/rankings': typeof RankingsRoute
   '/read': typeof ReadRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/collab': typeof CollabRoute
   '/community': typeof CommunityRoute
+  '/contests': typeof ContestsRoute
   '/faq': typeof FaqRoute
   '/rankings': typeof RankingsRoute
   '/read': typeof ReadRoute
@@ -181,6 +189,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/collab': typeof CollabRoute
   '/community': typeof CommunityRoute
+  '/contests': typeof ContestsRoute
   '/faq': typeof FaqRoute
   '/rankings': typeof RankingsRoute
   '/read': typeof ReadRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collab'
     | '/community'
+    | '/contests'
     | '/faq'
     | '/rankings'
     | '/read'
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collab'
     | '/community'
+    | '/contests'
     | '/faq'
     | '/rankings'
     | '/read'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/collab'
     | '/community'
+    | '/contests'
     | '/faq'
     | '/rankings'
     | '/read'
@@ -270,6 +282,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CollabRoute: typeof CollabRoute
   CommunityRoute: typeof CommunityRoute
+  ContestsRoute: typeof ContestsRoute
   FaqRoute: typeof FaqRoute
   RankingsRoute: typeof RankingsRoute
   ReadRoute: typeof ReadRoute
@@ -306,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contests': {
+      id: '/contests'
+      path: '/contests'
+      fullPath: '/contests'
+      preLoaderRoute: typeof ContestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -456,6 +476,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CollabRoute: CollabRoute,
   CommunityRoute: CommunityRoute,
+  ContestsRoute: ContestsRoute,
   FaqRoute: FaqRoute,
   RankingsRoute: RankingsRoute,
   ReadRoute: ReadRoute,

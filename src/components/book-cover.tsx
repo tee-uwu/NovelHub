@@ -17,7 +17,7 @@ const palettes = [
   "from-fuchsia-600 via-purple-800 to-slate-900",
 ];
 
-function fixImageUrl(url: string) {
+export function fixImageUrl(url: string) {
   if (!url) return "";
   try {
     const u = new URL(url);
