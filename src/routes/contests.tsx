@@ -303,6 +303,7 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
 
 
 function AdminContestDialog() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   

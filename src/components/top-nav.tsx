@@ -47,6 +47,15 @@ function useTheme() {
 
 export function TopNav() {
   const { t } = useTranslation();
+  
+  const links = [
+    { to: "/", label: t("nav.discover") },
+    { to: "/rankings", label: t("nav.rankings") },
+    { to: "/community", label: t("nav.community") },
+    { to: "/contests", label: t("nav.contests") },
+    { to: "/dashboard", label: "Create" },
+    { to: "/faq", label: "FAQ" },
+  ];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useSession();
   const router = useRouter();
