@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TopNav } from "@/components/top-nav";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -10,6 +10,11 @@ import { useSession } from "@/hooks/use-session";
 import { useState } from "react";
 import { toast } from "sonner";
 import { BookCover } from "@/components/book-cover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
 
 export const Route = createFileRoute("/contests")({
   component: ContestsPage,
@@ -57,9 +62,7 @@ function ContestsPage() {
           </p>
           {isAdmin && (
             <div className="pt-4">
-              <Button onClick={() => toast.info("Admin contest creation UI coming soon!")}>
-                Create New Contest (Admin)
-              </Button>
+              <AdminContestDialog />
             </div>
           )}
         </div>
@@ -184,5 +187,94 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function AdminContestDialog() {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [prize, setPrize] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.from("contests").insert({
+        title,
+        description,
+        prize,
+        end_date: endDate,
+        start_date: new Date().toISOString(),
+        status: "active"
+      }).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contests"] });
+      toast.success("Contest created successfully!");
+      setOpen(false);
+      // reset form
+      setTitle("");
+      setDescription("");
+      setPrize("");
+      setEndDate("");
+    },
+    onError: (error) => {
+      toast.error(`Failed to create contest: ${error.message}`);
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !description || !prize || !endDate) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    createMutation.mutate();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>Create New Contest (Admin)</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px]">
+        <form onSubmit={handleSubmit}>
+          <DialogHeader>
+            <DialogTitle>Create Writing Contest</DialogTitle>
+            <DialogDescription>
+              Launch a new writing contest for the community.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Contest Title</Label>
+              <Input id="title" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Summer Romance Prompt" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the rules, theme, and requirements..." />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="prize">Prize Details</Label>
+              <Input id="prize" value={prize} onChange={e => setPrize(e.target.value)} placeholder="e.g. 5000 XP & Special Badge" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="endDate">End Date</Label>
+              <Input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={createMutation.isPending}>
+              {createMutation.isPending ? "Creating..." : "Launch Contest"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
