@@ -12,6 +12,85 @@ export type Database = {
   }
   public: {
     Tables: {
+      contests: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          prize: string
+          status: string
+          start_date: string
+          end_date: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          prize: string
+          status?: string
+          start_date: string
+          end_date: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          prize?: string
+          status?: string
+          start_date?: string
+          end_date?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      contest_entries: {
+        Row: {
+          id: string
+          contest_id: string
+          novel_id: string
+          user_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          contest_id: string
+          novel_id: string
+          user_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          contest_id?: string
+          novel_id?: string
+          user_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contest_entries_contest_id_fkey"
+            columns: ["contest_id"]
+            isOneToOne: false
+            referencedRelation: "contests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contest_entries_novel_id_fkey"
+            columns: ["novel_id"]
+            isOneToOne: false
+            referencedRelation: "novels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contest_entries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -24,6 +103,9 @@ export type Database = {
           is_banned: boolean
           is_verified: boolean
           badges: string[]
+          xp: number
+          current_streak: number
+          longest_streak: number
         }
         Insert: {
           avatar_url?: string | null
@@ -36,6 +118,9 @@ export type Database = {
           is_banned?: boolean
           is_verified?: boolean
           badges?: string[]
+          xp?: number
+          current_streak?: number
+          longest_streak?: number
         }
         Update: {
           avatar_url?: string | null
@@ -48,6 +133,9 @@ export type Database = {
           is_banned?: boolean
           is_verified?: boolean
           badges?: string[]
+          xp?: number
+          current_streak?: number
+          longest_streak?: number
         }
         Relationships: []
       }
@@ -719,6 +807,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+        update_reading_streak: {
+          Args: {
+            p_user_id: string
+          }
+          Returns: void
+        }
       get_like_count: {
         Args: {
           p_type: Database["public"]["Enums"]["likeable_type"]
