@@ -167,6 +167,7 @@ export function TopNav() {
           })}
         </nav>
         <div className="ml-auto flex items-center gap-3">
+          <LanguageSwitcher />
           <Link to="/search" className="relative hidden sm:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input placeholder="Search novels, authors…" className="h-9 w-64 cursor-pointer pl-9" readOnly />
