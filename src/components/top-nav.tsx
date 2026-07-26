@@ -82,7 +82,7 @@ export function TopNav() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 lg:gap-6 px-4 sm:px-6">
         {/* Mobile menu */}
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
@@ -144,7 +144,7 @@ export function TopNav() {
           </SheetContent>
         </Sheet>
 
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-2 group shrink-0">
           <img src="/favicon.png" alt="NovelHub Logo" className="h-9 w-9 object-contain transition-transform group-hover:rotate-6 duration-300" />
           <span className="font-serif text-xl font-bold tracking-wide text-foreground transition-colors">
             Novel<span className="text-primary italic font-serif font-light">Hub</span>
@@ -166,10 +166,10 @@ export function TopNav() {
             );
           })}
         </nav>
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2 lg:gap-3">
           <Link to="/search" className="relative hidden sm:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search novels, authors…" className="h-9 w-64 cursor-pointer pl-9" readOnly />
+            <Input placeholder="Search novels, authors…" className="h-9 w-32 md:w-48 lg:w-64 cursor-pointer pl-9 transition-all" readOnly />
           </Link>
           {mounted ? (
             <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
