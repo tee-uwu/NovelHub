@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, TrendingUp, Medal, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next"; from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { NovelListSkeleton } from "@/components/loading-skeleton";
 
