@@ -53,6 +53,14 @@ function parseMarkdown(text: string) {
 }
 
 export const Route = createFileRoute("/read")({
+  head: () => ({
+    meta: [
+      { title: "Read | NovelHub" },
+      { name: "description", content: "Read your favorite novels on NovelHub." },
+      { property: "og:title", content: "Read | NovelHub" },
+      { property: "og:description", content: "Read your favorite novels on NovelHub." },
+    ],
+  }),
   validateSearch: (s) => searchSchema.parse(s),
   component: Reader,
 });

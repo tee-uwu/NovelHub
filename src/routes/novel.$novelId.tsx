@@ -26,6 +26,14 @@ import { useNovelCollaborators } from "@/hooks/use-collab";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 export const Route = createFileRoute("/novel/$novelId")({
+  head: () => ({
+    meta: [
+      { title: "Read Novel | NovelHub" },
+      { name: "description", content: "Read this amazing novel on NovelHub." },
+      { property: "og:title", content: "Read Novel | NovelHub" },
+      { property: "og:description", content: "Read this amazing novel on NovelHub." },
+    ],
+  }),
   component: NovelDetail,
 });
 

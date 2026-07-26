@@ -9,7 +9,15 @@ import { useNovels } from "@/hooks/use-novels";
 import { NovelListSkeleton } from "@/components/loading-skeleton";
 import { EmptyState } from "@/components/empty-state";
 
-export const Route = createFileRoute("/")({ component: Discover });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "NovelHub - Discover Amazing Novels" },
+      { name: "description", content: "Discover, read, and write amazing novels on NovelHub. Join a community of authors and readers." },
+      { property: "og:title", content: "NovelHub - Discover Amazing Novels" },
+      { property: "og:description", content: "Discover, read, and write amazing novels on NovelHub. Join a community of authors and readers." },
+    ],
+  }), component: Discover });
 
 const genres = ["Fantasy", "Sci-Fi", "Romance", "Mystery", "Action", "Drama", "Isekai"];
 

@@ -19,6 +19,14 @@ import { Label } from "@/components/ui/label";
 
 
 export const Route = createFileRoute("/contests")({
+  head: () => ({
+    meta: [
+      { title: "Writing Contests | NovelHub" },
+      { name: "description", content: "Participate in writing contests, win prizes, and get recognized on NovelHub." },
+      { property: "og:title", content: "Writing Contests | NovelHub" },
+      { property: "og:description", content: "Participate in writing contests, win prizes, and get recognized on NovelHub." },
+    ],
+  }),
   component: ContestsPage,
 });
 

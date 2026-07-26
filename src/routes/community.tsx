@@ -14,7 +14,15 @@ import { CreateCommunityDialog } from "@/components/create-community-dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/community")({ component: Community });
+export const Route = createFileRoute("/community")({
+  head: () => ({
+    meta: [
+      { title: "Community | NovelHub" },
+      { name: "description", content: "Join the NovelHub community. Discuss novels, share ideas, and connect with other readers and authors." },
+      { property: "og:title", content: "Community | NovelHub" },
+      { property: "og:description", content: "Join the NovelHub community. Discuss novels, share ideas, and connect with other readers and authors." },
+    ],
+  }), component: Community });
 
 const tags = ["Trending", "Fantasy", "Mystery", "Romance", "Action", "Isekai"];
 
