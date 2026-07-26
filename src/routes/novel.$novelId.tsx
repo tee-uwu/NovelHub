@@ -435,6 +435,7 @@ interface NovelSettingsDialogProps {
 }
 
 function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogProps) {
+  const { t } = useTranslation();
   const defaultGenres = ["Fantasy", "Sci-Fi", "Romance", "Mystery", "Action", "Drama", "Isekai"];
   const isDefaultGenre = defaultGenres.includes(novel?.genre || "Fantasy");
 

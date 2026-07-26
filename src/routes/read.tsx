@@ -67,6 +67,7 @@ export const Route = createFileRoute("/read")({
 });
 
 function Reader() {
+  const { t } = useTranslation();
   const { novelId, chapterId } = Route.useSearch();
   const { user } = useSession();
   const navigate = useNavigate();

@@ -15,6 +15,7 @@ export const Route = createFileRoute("/faq")({
 });
 
 function FaqPage() {
+  const { t } = useTranslation();
   const { data: faqs, isLoading } = useFaqs();
 
   return (
