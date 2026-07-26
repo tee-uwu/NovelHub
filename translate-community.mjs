@@ -1,0 +1,108 @@
+import fs from "fs";
+
+let en = JSON.parse(fs.readFileSync("src/locales/en.json", "utf8"));
+let bn = JSON.parse(fs.readFileSync("src/locales/bn.json", "utf8"));
+
+en.community = {
+  "pageTitle": "Discover Communities",
+  "pageSubtitle": "Connect with fellow readers around your favorite genres and novels.",
+  "searchPlaceholder": "Search communities...",
+  "popular": "Popular communities",
+  "loading": "Loading communities...",
+  "noCommunities": "No communities found in this category.",
+  "members": "members",
+  "joined": "Joined",
+  "leave": "Leave",
+  "join": "Join",
+  "activeChannel": "Active Channel",
+  "deleteCommunity": "Delete Community",
+  "deleteConfirm": "Are you sure you want to delete this community?",
+  "sharePlaceholder": "Share something with the",
+  "community": "community…",
+  "posting": "Posting…",
+  "post": "Post",
+  "mustBeMember": "You must be a member of this community to create posts.",
+  "joinCommunity": "Join Community",
+  "pleaseSignIn": "Please sign in to view and post in this community.",
+  "noPosts": "No posts yet. Be the first to start a conversation!",
+  "reply": "Reply",
+  "delete": "Delete",
+  "replyingTo": "Replying to",
+  "cancel": "Cancel",
+  "writeReply": "Write a reply…"
+};
+
+bn.community = {
+  "pageTitle": "???????? ??????",
+  "pageSubtitle": "????? ?????? ????? ??? ??????? ????? ???????? ??????? ???? ????? ????",
+  "searchPlaceholder": "???????? ??????...",
+  "popular": "???????? ????????",
+  "loading": "???????? ??? ?????...",
+  "noCommunities": "?? ?????? ???? ???????? ?????? ???????",
+  "members": "?????",
+  "joined": "????? ???????",
+  "leave": "????? ???",
+  "join": "????? ???",
+  "activeChannel": "??????? ???????",
+  "deleteCommunity": "???????? ?????",
+  "deleteConfirm": "???? ?? ??????? ?? ???? ?? ???????? ???? ????? ????",
+  "sharePlaceholder": "???? ?????? ????",
+  "community": "????????? ????...",
+  "posting": "????? ??? ?????…",
+  "post": "????? ????",
+  "mustBeMember": "????? ???? ??? ?????? ?????? ?? ????????? ????? ??? ????",
+  "joinCommunity": "?????????? ????? ???",
+  "pleaseSignIn": "?? ???????? ????? ??? ????? ???? ??????? ??? ???? ?? ?????",
+  "noPosts": "???? ???? ????? ???? ??????? ???? ???? ???? ????? ??!",
+  "reply": "????? ???",
+  "delete": "?????",
+  "replyingTo": "????? ???????",
+  "cancel": "????? ????",
+  "writeReply": "???? ????? ?????…"
+};
+
+fs.writeFileSync("src/locales/en.json", JSON.stringify(en, null, 2));
+fs.writeFileSync("src/locales/bn.json", JSON.stringify(bn, null, 2));
+
+let tsx = fs.readFileSync("src/routes/community.tsx", "utf8");
+
+if (!tsx.includes("useTranslation")) {
+  tsx = tsx.replace(
+    `import { useState } from "react";`,
+    `import { useState } from "react";\nimport { useTranslation } from "react-i18next";`
+  );
+}
+
+tsx = tsx.replace(
+  `function Community() {`,
+  `function Community() {\n  const { t } = useTranslation();`
+);
+
+tsx = tsx.replace(`>Discover Communities<`, `>{t("community.pageTitle")}<`);
+tsx = tsx.replace(`>Connect with fellow readers around your favorite genres and novels.<`, `>{t("community.pageSubtitle")}<`);
+tsx = tsx.replace(`placeholder="Search communities..."`, `placeholder={t("community.searchPlaceholder")}`);
+tsx = tsx.replace(`>Popular communities<`, `>{t("community.popular")}<`);
+tsx = tsx.replace(`>Loading communities...<`, `>{t("community.loading")}<`);
+tsx = tsx.replace(`>No communities found in this category.<`, `>{t("community.noCommunities")}<`);
+tsx = tsx.replace(` members</p>`, ` {t("community.members")}</p>`);
+tsx = tsx.replace(/>Joined</g, `>{t("community.joined")}<`);
+tsx = tsx.replace(/>Leave</g, `>{t("community.leave")}<`);
+tsx = tsx.replace(/>Join</g, `>{t("community.join")}<`);
+tsx = tsx.replace(/>Active Channel</g, `>{t("community.activeChannel")}<`);
+tsx = tsx.replace(/>Delete Community</g, `>{t("community.deleteCommunity")}<`);
+tsx = tsx.replace(`"Are you sure you want to delete this community?"`, `t("community.deleteConfirm")`);
+tsx = tsx.replace(/placeholder={\`Share something with the \${activeCommunity\.name} community…\`}/, `placeholder={\`\${t("community.sharePlaceholder")} \${activeCommunity.name} \${t("community.community")}\`}`);
+tsx = tsx.replace(/>Posting…</g, `>{t("community.posting")}<`);
+tsx = tsx.replace(/>Post</g, `>{t("community.post")}<`);
+tsx = tsx.replace(`>You must be a member of this community to create posts.<`, `>{t("community.mustBeMember")}<`);
+tsx = tsx.replace(`>Join Community<`, `>{t("community.joinCommunity")}<`);
+tsx = tsx.replace(`Please sign in to view and post in this community.`, `{t("community.pleaseSignIn")}`);
+tsx = tsx.replace(`>No posts yet. Be the first to start a conversation!<`, `>{t("community.noPosts")}<`);
+tsx = tsx.replace(/>Reply</g, `>{t("community.reply")}<`);
+tsx = tsx.replace(/>Delete</g, `>{t("community.delete")}<`);
+tsx = tsx.replace(/Replying to <span/, `{t("community.replyingTo")} <span`);
+tsx = tsx.replace(/>Cancel</g, `>{t("community.cancel")}<`);
+tsx = tsx.replace(/placeholder="Write a reply…"/, `placeholder={t("community.writeReply")}`);
+
+fs.writeFileSync("src/routes/community.tsx", tsx);
+

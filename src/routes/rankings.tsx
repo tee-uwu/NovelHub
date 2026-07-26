@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, TrendingUp, Medal, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next"; from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { NovelListSkeleton } from "@/components/loading-skeleton";
 
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/rankings")({
 });
 
 function Rankings() {
+  const { t } = useTranslation();
   const { data: novels = [], isLoading } = useQuery({
     queryKey: ["rankings"],
     queryFn: async () => {
@@ -82,7 +84,7 @@ function Rankings() {
                       <h3 className="font-serif font-bold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-1">
                         {book2.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground">by {book2.author?.display_name}</p>
+                      <p className="text-xs text-muted-foreground">{t("rankings.by")} {book2.author?.display_name}</p>
                       <div className="flex items-center gap-1 justify-center pt-1 text-[10px] text-muted-foreground font-mono">
                         <TrendingUp className="h-3 w-3" />
                         <span>{(book2.view_count >= 1000 ? (book2.view_count / 1000).toFixed(1) + "K" : book2.view_count)} views</span>
@@ -90,7 +92,7 @@ function Rankings() {
                     </div>
                     <div className="hidden sm:flex flex-col items-center justify-center w-full h-16 bg-card border border-b-0 rounded-t-lg shadow-sm">
                       <Medal className="h-5 w-5 text-slate-400 mb-0.5" />
-                      <span className="font-serif text-[10px] font-bold text-muted-foreground">Runner Up</span>
+                      <span className="font-serif text-[10px] font-bold text-muted-foreground">{t("rankings.runnerUp")}</span>
                     </div>
                   </Link>
                 )}
@@ -117,7 +119,7 @@ function Rankings() {
                       <h3 className="font-serif font-bold text-base leading-snug group-hover:text-primary transition-colors line-clamp-1">
                         {book1.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground font-medium">by {book1.author?.display_name}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{t("rankings.by")} {book1.author?.display_name}</p>
                       <div className="flex items-center gap-1 justify-center pt-1 text-xs text-primary font-mono font-semibold">
                         <Trophy className="h-3.5 w-3.5 fill-primary/10" />
                         <span>{(book1.view_count >= 1000 ? (book1.view_count / 1000).toFixed(1) + "K" : book1.view_count)} views</span>
@@ -125,7 +127,7 @@ function Rankings() {
                     </div>
                     <div className="hidden sm:flex flex-col items-center justify-center w-full h-24 bg-primary/10 border border-primary/20 border-b-0 rounded-t-lg shadow-md">
                       <Trophy className="h-6 w-6 text-amber-500 mb-1 animate-bounce" />
-                      <span className="font-serif text-xs font-bold text-primary">Leader</span>
+                      <span className="font-serif text-xs font-bold text-primary">{t("rankings.leader")}</span>
                     </div>
                   </Link>
                 )}
@@ -152,7 +154,7 @@ function Rankings() {
                       <h3 className="font-serif font-bold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-1">
                         {book3.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground">by {book3.author?.display_name}</p>
+                      <p className="text-xs text-muted-foreground">{t("rankings.by")} {book3.author?.display_name}</p>
                       <div className="flex items-center gap-1 justify-center pt-1 text-[10px] text-muted-foreground font-mono">
                         <TrendingUp className="h-3 w-3" />
                         <span>{(book3.view_count >= 1000 ? (book3.view_count / 1000).toFixed(1) + "K" : book3.view_count)} views</span>
@@ -160,7 +162,7 @@ function Rankings() {
                     </div>
                     <div className="hidden sm:flex flex-col items-center justify-center w-full h-12 bg-card border border-b-0 rounded-t-lg shadow-sm">
                       <Medal className="h-4 w-4 text-amber-700 mb-0.5" />
-                      <span className="font-serif text-[10px] font-bold text-muted-foreground">3rd Place</span>
+                      <span className="font-serif text-[10px] font-bold text-muted-foreground">{t("rankings.thirdPlace")}</span>
                     </div>
                   </Link>
                 )}
@@ -170,7 +172,7 @@ function Rankings() {
             {/* Remaining Leaderboard */}
             {remainder.length > 0 && (
               <div className="space-y-4">
-                <h2 className="text-xl font-serif font-semibold text-foreground border-b pb-2">Leaderboard</h2>
+                <h2 className="text-xl font-serif font-semibold text-foreground border-b pb-2">{t("rankings.leaderboard")}</h2>
                 <div className="grid gap-3">
                   {remainder.map((b, i) => {
                     const rankNum = i + 4;
@@ -195,7 +197,7 @@ function Rankings() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <h3 className="truncate font-serif text-base font-semibold hover:text-primary transition-colors">{b.title}</h3>
-                          <p className="truncate text-xs text-muted-foreground">by {b.author?.display_name}</p>
+                          <p className="truncate text-xs text-muted-foreground">{t("rankings.by")} {b.author?.display_name}</p>
                         </div>
                         <div className="flex items-center gap-4 text-xs shrink-0">
                           <span className="flex items-center gap-1.5 text-muted-foreground font-mono bg-muted/40 px-2 py-1 rounded-md">

@@ -22,7 +22,7 @@ function FaqPage() {
       <TopNav />
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
         <div className="text-center mb-10">
-          <h1 className="font-serif text-4xl font-bold tracking-tight mb-4">Frequently Asked Questions</h1>
+          <h1 className="font-serif text-4xl font-bold tracking-tight mb-4">{t("faq.title")}</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Welcome to NovelHub! Whether you're a reader looking for your next great story, or an author collaborating with a team, you'll find everything you need to know right here.
           </p>

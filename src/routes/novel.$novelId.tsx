@@ -16,6 +16,7 @@ import { ReviewForm } from "@/components/review-form";
 import { toast } from "sonner";
 import { ChapterListSkeleton } from "@/components/loading-skeleton";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -535,7 +536,7 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
             </div>
           </div>
           <div>
-            <Label htmlFor="set-synopsis">Synopsis</Label>
+            <Label htmlFor="set-synopsis">{t("novelDetails.synopsis")}</Label>
             <Textarea id="set-synopsis" value={synopsis} onChange={(e) => setSynopsis(e.target.value)} className="min-h-[100px]" />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -583,6 +584,7 @@ function NovelSettingsDialog({ novel, open, onOpenChange }: NovelSettingsDialogP
 }
 
 function NovelDetail() {
+  const { t } = useTranslation();
   const { novelId: slug } = Route.useParams();
   const { user } = useSession();
   const { data: novel, isLoading: novelLoading } = useNovel(slug);
@@ -739,7 +741,7 @@ function NovelDetail() {
             <div className="flex flex-wrap gap-2">
               {firstChapter ? (
                 <Link to="/read" search={{ novelId: novel.id, chapterId: firstChapter.id }}>
-                  <Button size="lg"><BookOpen className="mr-2 h-4 w-4" />Start Reading</Button>
+                  <Button size="lg"><BookOpen className="mr-2 h-4 w-4" />{t("novelDetails.startReading")}</Button>
                 </Link>
               ) : (
                 <Button size="lg" disabled><BookOpen className="mr-2 h-4 w-4" />No Chapters</Button>
@@ -768,10 +770,10 @@ function NovelDetail() {
                 </Button>
               ) : (
                 <Link to="/auth">
-                  <Button size="lg" variant="outline"><Bookmark className="mr-2 h-4 w-4" />Add to Library</Button>
+                  <Button size="lg" variant="outline"><Bookmark className="mr-2 h-4 w-4" />{t("novelDetails.addToLibrary")}</Button>
                 </Link>
               )}
-              <Button size="lg" variant="ghost" onClick={handleShare}><Share2 className="mr-2 h-4 w-4" />Share</Button>
+              <Button size="lg" variant="ghost" onClick={handleShare}><Share2 className="mr-2 h-4 w-4" />{t("novelDetails.share")}</Button>
             </div>
           </div>
         </div>
@@ -780,9 +782,9 @@ function NovelDetail() {
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <Tabs defaultValue="chapters">
           <TabsList>
-            <TabsTrigger value="chapters">Chapters</TabsTrigger>
+            <TabsTrigger value="chapters">{t("novelDetails.chapters")}</TabsTrigger>
             <TabsTrigger value="credits">Credits & Collabs</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
+            <TabsTrigger value="reviews">{t("novelDetails.reviews")}</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
           </TabsList>
 

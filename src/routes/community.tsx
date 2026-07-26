@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Heart, MessageCircle, Share2, TrendingUp, Users, Circle, Check, Plus, Search } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useCommunities, useCommunityPosts, useIsMember, useToggleMembership, useCreatePost, useDeletePost, useMyCommunities, useDeleteCommunity } from "@/hooks/use-community";
 import { useSession } from "@/hooks/use-session";
 import { CreateCommunityDialog } from "@/components/create-community-dialog";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/community")({
 const tags = ["Trending", "Fantasy", "Mystery", "Romance", "Action", "Isekai"];
 
 function Community() {
+  const { t } = useTranslation();
   const { user } = useSession();
   const [selectedTag, setSelectedTag] = useState("Trending");
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,15 +93,15 @@ function Community() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <header className="mb-8 space-y-5">
           <div>
-            <h1 className="font-serif text-4xl font-semibold tracking-tight">Discover Communities</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Connect with fellow readers around your favorite genres and novels.</p>
+            <h1 className="font-serif text-4xl font-semibold tracking-tight">{t("community.pageTitle")}</h1>
+            <p className="mt-1 text-sm text-muted-foreground">{t("community.pageSubtitle")}</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search communities..."
+                placeholder={t("community.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
@@ -127,11 +129,11 @@ function Community() {
         <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-8">
             <section>
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Popular communities</h2>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("community.popular")}</h2>
               {commsLoading ? (
-                <p className="text-muted-foreground animate-pulse">Loading communities...</p>
+                <p className="text-muted-foreground animate-pulse">{t("community.loading")}</p>
               ) : filteredComms.length === 0 ? (
-                <p className="text-muted-foreground text-sm">No communities found in this category.</p>
+                <p className="text-muted-foreground text-sm">{t("community.noCommunities")}</p>
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2">
                   {filteredComms.map((c) => {
@@ -150,7 +152,7 @@ function Community() {
                         <div className="flex items-start justify-between">
                           <div>
                             <h3 className="font-serif text-lg font-semibold">{c.name}</h3>
-                            <p className="text-xs text-muted-foreground">{memberCount} members</p>
+                            <p className="text-xs text-muted-foreground">{memberCount} {t("community.members")}</p>
                           </div>
                           {user && (
                             <Button
@@ -165,8 +167,8 @@ function Community() {
                               {isJoined ? (
                                 <>
                                   <Check className="mr-1 h-3 w-3 group-hover:hidden" />
-                                  <span className="group-hover:hidden">Joined</span>
-                                  <span className="hidden group-hover:inline">Leave</span>
+                                  <span className="group-hover:hidden">{t("community.joined")}</span>
+                                  <span className="hidden group-hover:inline">{t("community.leave")}</span>
                                 </>
                               ) : (
                                 "Join"
@@ -192,14 +194,14 @@ function Community() {
                 <div className="mb-4 flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
                     <h2 className="font-serif text-2xl font-semibold">{activeCommunity.name}</h2>
-                    <Badge variant="secondary">Active Channel</Badge>
+                    <Badge variant="secondary">{t("community.activeChannel")}</Badge>
                   </div>
                   {(user?.id === activeCommunity.created_by || (user as any)?.role === "admin") && (
                     <Button 
                       variant="destructive" 
                       size="sm"
                       onClick={() => {
-                        if (window.confirm("Are you sure you want to delete this community?")) {
+                        if (window.confirm(t("community.deleteConfirm"))) {
                           deleteCommunity.mutate(activeCommunity.id, {
                             onSuccess: () => setActiveCommId(null)
                           });
@@ -237,14 +239,14 @@ function Community() {
                   </Card>
                 ) : user && !isMember ? (
                   <Card className="mb-6 p-6 text-center text-sm text-muted-foreground space-y-3">
-                    <p>You must be a member of this community to create posts.</p>
+                    <p>{t("community.mustBeMember")}</p>
                     <Button onClick={() => toggleMembership.mutate({ communityId: activeId })}>
                       Join Community
                     </Button>
                   </Card>
                 ) : (
                   <Card className="mb-6 p-6 text-center text-sm text-muted-foreground">
-                    Please sign in to view and post in this community.
+                    {t("community.pleaseSignIn")}
                   </Card>
                 )}
 
@@ -281,10 +283,10 @@ function Community() {
                               </div>
                               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                 {user && !isReplying && (
-                                  <button onClick={() => setReplyingPostId(p.id)} className="text-xs text-primary hover:underline">Reply</button>
+                                  <button onClick={() => setReplyingPostId(p.id)} className="text-xs text-primary hover:underline">{t("community.reply")}</button>
                                 )}
                                 {(isMe || isAdmin) && (
-                                  <button onClick={() => { if (confirm("Delete this post?")) deletePostMutation.mutate({ postId: p.id }); }} className="text-xs text-red-500 hover:underline">Delete</button>
+                                  <button onClick={() => { if (confirm("Delete this post?")) deletePostMutation.mutate({ postId: p.id }); }} className="text-xs text-red-500 hover:underline">{t("community.delete")}</button>
                                 )}
                               </div>
                             </div>
@@ -301,7 +303,7 @@ function Community() {
                                 className="min-h-[60px] text-sm resize-none"
                               />
                               <div className="flex gap-2 justify-end">
-                                <Button size="sm" variant="outline" onClick={() => { setReplyingPostId(null); setReplyContent(""); }}>Cancel</Button>
+                                <Button size="sm" variant="outline" onClick={() => { setReplyingPostId(null); setReplyContent(""); }}>{t("community.cancel")}</Button>
                                 <Button
                                   size="sm"
                                   disabled={createPost.isPending || !replyContent.trim()}
@@ -363,7 +365,7 @@ function Community() {
                                           </button>
                                         )}
                                         {(isReplyMe || isAdmin) && (
-                                          <button onClick={() => { if (confirm("Delete this reply?")) deletePostMutation.mutate({ postId: r.id }); }} className="text-xs text-red-500 hover:underline">Delete</button>
+                                          <button onClick={() => { if (confirm("Delete this reply?")) deletePostMutation.mutate({ postId: r.id }); }} className="text-xs text-red-500 hover:underline">{t("community.delete")}</button>
                                         )}
                                       </div>
                                     </div>

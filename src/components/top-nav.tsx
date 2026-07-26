@@ -181,6 +181,7 @@ export function TopNav() {
               <div className="h-5 w-5" />
             </Button>
           )}
+          <LanguageSwitcher />
           {user ? (
             <>
               <Link to="/notifications">

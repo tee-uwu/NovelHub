@@ -17,6 +17,7 @@ import { useComments, useCreateComment } from "@/hooks/use-comments";
 import { useToggleLibrary, useUpdateProgress } from "@/hooks/use-library";
 import { useSession } from "@/hooks/use-session";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
@@ -303,7 +304,7 @@ function Reader() {
           <div className="mb-6 flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                Chapter {chapter.chapter_number}
+                {t("read.chapter")} {chapter.chapter_number}
               </p>
               <h1 className="mt-1 font-serif text-3xl font-semibold">{chapter.title}</h1>
             </div>
@@ -374,7 +375,7 @@ function Reader() {
           <section className="mt-16">
             <div className="mb-4 flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Comments</h2>
+              <h2 className="text-lg font-semibold">{t("read.comments")}</h2>
               <span className="text-sm text-muted-foreground">{comments.length}</span>
             </div>
 

@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Search as SearchIcon, Eye, Calendar, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNovels } from "@/hooks/use-novels";
 import { NovelListSkeleton } from "@/components/loading-skeleton";
 import { EmptyState } from "@/components/empty-state";
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/search")({
 const suggestions = ["Fantasy", "Isekai", "Sci-Fi", "Romance", "Adventure", "Mystery"];
 
 function Search() {
+  const { t } = useTranslation();
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
   const [selectedGenre, setSelectedGenre] = useState<string>("all");
@@ -92,7 +94,7 @@ function Search() {
         {/* Suggestion Chips */}
         {!q && (
           <div className="mt-4 flex flex-wrap gap-2 items-center">
-            <span className="text-xs text-muted-foreground mr-1.5">Suggestions:</span>
+            <span className="text-xs text-muted-foreground mr-1.5">{t("search.suggestions")}</span>
             {suggestions.map((s) => (
               <button key={s} onClick={() => setQ(s)} type="button">
                 <Badge variant="secondary" className="cursor-pointer font-normal hover:bg-secondary/80 transition-colors">
@@ -113,7 +115,7 @@ function Search() {
                   <SelectValue placeholder="All Genres" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Genres</SelectItem>
+                  <SelectItem value="all">{t("search.allGenres")}</SelectItem>
                   {["Fantasy", "Sci-Fi", "Romance", "Mystery", "Action", "Drama", "Isekai"].map((g) => (
                     <SelectItem key={g} value={g.toLowerCase()}>{g}</SelectItem>
                   ))}
@@ -147,7 +149,7 @@ function Search() {
           ) : sortedResults.length === 0 ? (
             <EmptyState
               icon={SearchIcon}
-              title="No results found"
+              title={t("search.noResults")}
               description="Try adjusting your keywords, selecting different genres, or sorting types."
             />
           ) : (
