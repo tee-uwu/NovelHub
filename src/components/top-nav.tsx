@@ -16,14 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUnreadCount } from "@/hooks/use-notifications";
 
-const links = [
-  { to: "/", label: t("nav.discover") },
-  { to: "/rankings", label: t("nav.rankings") },
-  { to: "/community", label: t("nav.community") },
-  { to: "/contests", label: t("nav.contests") },
-  { to: "/dashboard", label: "Create" },
-  { to: "/faq", label: "FAQ" },
-];
+
 
 function useTheme() {
   const [mounted, setMounted] = useState(false);
