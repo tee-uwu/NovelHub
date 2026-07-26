@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TopNav } from "@/components/top-nav";
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/")({
 const genres = ["Fantasy", "Sci-Fi", "Romance", "Mystery", "Action", "Drama", "Isekai"];
 
 function Discover() {
+  const { t } = useTranslation();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
 
   const { data: novels = [], isLoading } = useNovels({
@@ -125,7 +127,7 @@ function Discover() {
                       <div className="mt-3 space-y-1">
                         <Badge variant="outline" className="text-xs">{b.genre}</Badge>
                         <h3 className="font-serif text-base font-semibold group-hover:text-primary leading-tight truncate">{b.title}</h3>
-                        <p className="text-xs text-muted-foreground">by {b.author?.display_name}</p>
+                        <p className="text-xs text-muted-foreground">{t("home.by")} {b.author?.display_name}</p>
                       </div>
                     </Link>
                   ))}
@@ -153,7 +155,7 @@ function Discover() {
                         <div className="mt-3 space-y-1">
                           <Badge variant="outline" className="text-xs">{b.genre}</Badge>
                           <h3 className="font-serif text-base font-semibold group-hover:text-primary leading-tight truncate">{b.title}</h3>
-                          <p className="text-xs text-muted-foreground">by {b.author?.display_name}</p>
+                          <p className="text-xs text-muted-foreground">{t("home.by")} {b.author?.display_name}</p>
                           <p className="line-clamp-2 text-xs text-muted-foreground pt-1">{b.synopsis}</p>
                         </div>
                       </Link>
@@ -206,7 +208,7 @@ function Discover() {
                                 <span className="text-xs text-muted-foreground font-mono">{formattedReads} views</span>
                               </div>
                               <h3 className="font-serif text-lg font-semibold leading-snug group-hover:text-primary truncate">{b.title}</h3>
-                              <p className="text-xs text-muted-foreground">by {b.author?.display_name}</p>
+                              <p className="text-xs text-muted-foreground">{t("home.by")} {b.author?.display_name}</p>
                               <p className="line-clamp-3 pt-1 text-sm text-muted-foreground">{b.synopsis}</p>
                             </div>
                           </Card>

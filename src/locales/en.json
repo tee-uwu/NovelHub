@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "home": "Home",
+    "discover": "Discover",
+    "contests": "Contests",
+    "rankings": "Rankings",
+    "community": "Community",
+    "search": "Search",
+    "login": "Login / Sign up",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "inbox": "Inbox",
+    "admin": "Admin",
+    "logout": "Log out"
+  },
+  "home": {
+    "welcome": "Welcome back",
+    "discoverTitle": "Discover New Worlds",
+    "trending": "Trending Now",
+    "latestUpdates": "Latest Updates",
+    "readNow": "Read Now",
+    "chapters": "Chapters",
+    "by": "by",
+    "noNovels": "No novels found for this genre."
+  },
+  "contests": {
+    "title": "Writing Contests",
+    "description": "Join our official writing contests to win exciting prizes, gain exposure, and challenge your creativity.",
+    "activeTitle": "Active Contests",
+    "activeDesc": "Current contests you can participate in.",
+    "pastTitle": "Past Contests",
+    "pastDesc": "Previous contests and their winners.",
+    "ends": "Ends",
+    "prize": "Prize",
+    "participants": "Participants",
+    "viewDetails": "View Details",
+    "enterContest": "Enter Contest",
+    "contestEnded": "Contest Ended",
+    "descriptionRules": "Description & Rules",
+    "noActive": "No active contests at the moment. Check back later!",
+    "noPast": "No past contests found.",
+    "beTheFirst": "No one has entered this contest yet. Be the first!",
+    "readNovel": "Read Novel",
+    "selectNovel": "Select Novel",
+    "submitEntry": "Submit Entry",
+    "entering": "Entering...",
+    "cancel": "Cancel",
+    "loginToParticipate": "Please login to participate.",
+    "needApprovedNovel": "You need an approved novel to enter."
+  }
+}

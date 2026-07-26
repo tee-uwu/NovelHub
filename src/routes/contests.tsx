@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/contests")({
 });
 
 function ContestsPage() {
+  const { t } = useTranslation();
   const { user } = useSession();
   
   const { data: contests = [], isLoading } = useQuery({
@@ -65,7 +67,7 @@ function ContestsPage() {
       <TopNav />
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:py-12">
         <div className="mb-12 text-center space-y-4">
-          <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-transparent uppercase tracking-wider text-xs">Writing Contests</Badge>
+          <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-transparent uppercase tracking-wider text-xs">{t("contests.title")}</Badge>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold text-foreground">Challenges & Prompts</h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Participate in our monthly writing contests. Win prizes, gain exposure, and challenge yourself.
@@ -130,6 +132,7 @@ function ContestsPage() {
 
 
 function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boolean }) {
+  const { t } = useTranslation();
   const { user } = useSession();
   const [submitting, setSubmitting] = useState(false);
   const [enterOpen, setEnterOpen] = useState(false);
@@ -148,7 +151,7 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
 
   const handleEnterContest = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return toast.error("Please login to participate.");
+    if (!user) return toast.error(t("contests.loginToParticipate"));
     if (!selectedNovelId) return toast.error("Please select a novel to enter.");
     
     setSubmitting(true);
@@ -176,13 +179,13 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
         <CardTitle className="font-serif text-xl">{contest.title}</CardTitle>
         <CardDescription className="flex flex-col gap-2 mt-2">
           <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <CalendarDays className="h-3 w-3" /> Ends: {new Date(contest.end_date).toLocaleDateString()}
+            <CalendarDays className="h-3 w-3" /> {t("contests.ends")}: {new Date(contest.end_date).toLocaleDateString()}
           </span>
           <span className="flex items-center gap-1.5 text-xs text-orange-500 font-medium">
-            <Trophy className="h-3 w-3" /> Prize: {contest.prize}
+            <Trophy className="h-3 w-3" /> {t("contests.prize")}: {contest.prize}
           </span>
           <span className="flex items-center gap-1.5 text-xs text-blue-500 font-medium">
-            <Users className="h-3 w-3" /> Participants: {contest.entries?.length || 0}
+            <Users className="h-3 w-3" /> {t("contests.participants")}: {contest.entries?.length || 0}
           </span>
         </CardDescription>
       </CardHeader>
@@ -201,11 +204,11 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
               <DialogTrigger asChild>
                 <Button className="flex-1" onClick={() => {
                   if (!user) {
-                    toast.error("Please login to participate.");
+                    toast.error(t("contests.loginToParticipate"));
                     return;
                   }
                   if (myNovels.length === 0) {
-                    toast.error("You need an approved novel to enter.");
+                    toast.error(t("contests.needApprovedNovel"));
                     return;
                   }
                 }}>
@@ -215,11 +218,11 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
               <DialogContent>
                 <form onSubmit={handleEnterContest}>
                   <DialogHeader>
-                    <DialogTitle>Enter Contest</DialogTitle>
+                    <DialogTitle>{t("contests.enterContest")}</DialogTitle>
                     <DialogDescription>Select which of your approved novels you'd like to submit for "{contest.title}".</DialogDescription>
                   </DialogHeader>
                   <div className="py-6">
-                    <Label className="mb-2 block">Select Novel</Label>
+                    <Label className="mb-2 block">{t("contests.selectNovel")}</Label>
                     <Select value={selectedNovelId} onValueChange={setSelectedNovelId}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a novel..." />
@@ -232,7 +235,7 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
                     </Select>
                   </div>
                   <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setEnterOpen(false)}>Cancel</Button>
+                    <Button type="button" variant="outline" onClick={() => setEnterOpen(false)}>{t("contests.cancel")}</Button>
                     <Button type="submit" disabled={submitting || !selectedNovelId}>
                       {submitting ? "Entering..." : "Submit Entry"}
                     </Button>
@@ -257,22 +260,22 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
                 <Trophy className="h-3 w-3" /> {contest.prize}
               </Badge>
               <Badge variant="outline" className="flex items-center gap-1">
-                <CalendarDays className="h-3 w-3" /> Ends: {new Date(contest.end_date).toLocaleDateString()}
+                <CalendarDays className="h-3 w-3" /> {t("contests.ends")}: {new Date(contest.end_date).toLocaleDateString()}
               </Badge>
             </div>
           </DialogHeader>
           <div className="py-4 space-y-6">
             <div>
-              <h4 className="text-sm font-semibold mb-2 uppercase tracking-wider text-muted-foreground">Description & Rules</h4>
+              <h4 className="text-sm font-semibold mb-2 uppercase tracking-wider text-muted-foreground">{t("contests.descriptionRules")}</h4>
               <p className="text-sm whitespace-pre-wrap leading-relaxed">{contest.description}</p>
             </div>
             
             <div className="border-t pt-6">
               <h4 className="text-sm font-semibold mb-4 flex items-center gap-2 uppercase tracking-wider text-muted-foreground">
-                <Users className="h-4 w-4" /> Participants ({contest.entries?.length || 0})
+                <Users className="h-4 w-4" /> {t("contests.participants")} ({contest.entries?.length || 0})
               </h4>
               {(!contest.entries || contest.entries.length === 0) ? (
-                <p className="text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg text-center">No one has entered this contest yet. Be the first!</p>
+                <p className="text-sm text-muted-foreground bg-muted/50 p-4 rounded-lg text-center">{t("contests.beTheFirst")}</p>
               ) : (
                 <div className="space-y-3">
                   {contest.entries.map((entry: any) => (
@@ -284,7 +287,7 @@ function ContestCard({ contest, isPast = false }: { contest: any, isPast?: boole
                         <p className="text-xs text-muted-foreground mt-0.5">by {entry.user?.display_name}</p>
                       </div>
                       <Link to={`/novel/${entry.novel?.slug}`} onClick={() => setDetailsOpen(false)}>
-                        <Button size="sm" variant="secondary">Read Novel</Button>
+                        <Button size="sm" variant="secondary">{t("contests.readNovel")}</Button>
                       </Link>
                     </div>
                   ))}
@@ -377,7 +380,7 @@ function AdminContestDialog() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>{t("contests.cancel")}</Button>
             <Button type="submit" disabled={createMutation.isPending}>
               {createMutation.isPending ? "Creating..." : "Launch Contest"}
             </Button>

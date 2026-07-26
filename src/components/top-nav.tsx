@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./language-switcher";
 import { useState, useEffect } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { Search, BookOpen, LogOut, User as UserIcon, LayoutDashboard, Bell, Library, Settings as SettingsIcon, Sun, Moon, Menu, ShieldCheck, MessageSquare } from "lucide-react";
@@ -15,10 +17,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUnreadCount } from "@/hooks/use-notifications";
 
 const links = [
-  { to: "/", label: "Discover" },
-  { to: "/rankings", label: "Rankings" },
-  { to: "/community", label: "Community" },
-  { to: "/contests", label: "Contests" },
+  { to: "/", label: t("nav.discover") },
+  { to: "/rankings", label: t("nav.rankings") },
+  { to: "/community", label: t("nav.community") },
+  { to: "/contests", label: t("nav.contests") },
   { to: "/dashboard", label: "Create" },
   { to: "/faq", label: "FAQ" },
 ];
@@ -44,6 +46,7 @@ function useTheme() {
 }
 
 export function TopNav() {
+  const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user } = useSession();
   const router = useRouter();
